@@ -20,7 +20,14 @@ dataset.head()
 # %%
 # dims = np.array([30, 10, 10, 2], dtype=int)
 dims = [30, 10, 10, 2]
+x = np.arange(0, 30, 1, dtype=int)
+print(x)
+
+# %%
 model = DenseNeuralNet(dims)
+
+# %%
+print(model._forward_propagation(x, model._sigmoid))
 
 def clean_data(data: pd.DataFrame) -> pd.DataFrame:
     """adds labels and cleans up data

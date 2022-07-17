@@ -24,7 +24,7 @@ class DenseNeuralNet:
     allowed_distributions = ['uniform', 'normal', 'gaussian']
     allowed_init_methods = ['xavier', 'normal', ]
 
-    def __init__(self, dimensions: np.array | list, weights: np.array | list = None, init_method='xavier', distribution='uniform'):
+    def __init__(self, dimensions: np.array, weights: np.array = None, init_method='xavier', distribution='uniform'):
         self.weights: list = weights if weights is not None else []
         self.biases: list = []
         self.init_method = init_method
@@ -64,8 +64,12 @@ class DenseNeuralNet:
             return np.random.uniform(low=-limit, high=limit, size=(fan_in, fan_out))
         raise ValueError("distribution is invalid!")
 
-    def _forward_propagation(self):
-        pass
+    def _forward_propagation(self, x, activation_func) -> np.array:
+        for i, layer in enumerate(self.weights[:-1]):
+            z = layer.T.dot(x) + self.biases[i]
+            x = activation_func(z)
+        z = self.weights[-1].T.dot(x) + self.biases[-1]
+        return self._softmax(z)
 
     def _sigmoid(self, x: np.array) -> np.array:
         return 1 / (1 + np.exp(-x))
