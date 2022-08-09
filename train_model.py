@@ -1,9 +1,10 @@
 # %%
-import sys
 import numpy as np
 import pandas as pd
 
-from dense_neural_net import DenseNeuralNet
+# from dense_neural_net import DenseNeuralNet
+from Layers import Dense
+from activation_functions import *
 
 # %% constants
 dataset_path = 'datasets/data-multilayer-perceptron.csv'
@@ -24,20 +25,20 @@ x = np.arange(0, 30, 1, dtype=int)
 print(x)
 
 # %%
-model = DenseNeuralNet(dims)
+# model = DenseNeuralNet(dims)
 
 # %%
-print(model._forward_propagation(x, model._sigmoid))
+# print(model._forward_propagation(x, model._sigmoid))
 
 def clean_data(data: pd.DataFrame) -> pd.DataFrame:
-    """adds labels and cleans up data
-
-    Args:
-        data (pd.DataFrame)
-
-    Returns:
-        pd.DataFrame
-    """
     return data
 
+# %%
+layer = Dense((4, 2), activation=SoftMax, init_method='xavier', distribution='normal')
+
+#%%
+layer.weights
+
+#%%
+layer._forward([1, 2, 1, 2.5], activation=SoftMax)
 # %%

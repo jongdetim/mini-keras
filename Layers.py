@@ -56,14 +56,14 @@ class Dense(Layer):
         self.biases = np.zeros(fan_out)
 
     def _normal_init(self, fan_in: int, fan_out: int) -> np.array:
-        if self.distribution == ('normal' or 'gaussian'):
-            return np.random.normal(loc=0.0, scale=1.0, size=(fan_in, fan_out)) * 0.01
+        if self.distribution in ['normal','gaussian']:
+            return np.random.normal(loc=0.0, scale=0.02, size=(fan_in, fan_out))
         if self.distribution == 'uniform':
             return np.random.uniform(low=-0.05, high=0.05, size=(fan_in, fan_out))
         raise ValueError("distribution is invalid!")
 
     def _xavier_init(self, fan_in: int, fan_out: int) -> np.array:
-        if self.distribution == ('normal' or 'gaussian'):
+        if self.distribution in ['normal','gaussian']:
             limit = np.sqrt(2 / float(fan_in + fan_out))
             return np.random.normal(loc=0.0, scale=limit, size=(fan_in, fan_out))
         if self.distribution == 'uniform':
@@ -75,7 +75,7 @@ class Dense(Layer):
         self.input = x
         z = self.weights.T.dot(x) + self.biases # <- should bias vector be transposed too?
         if activation:
-            z = activation(z)
+            z = activation.forward(z)
         self.output = z
         return self.output
 
