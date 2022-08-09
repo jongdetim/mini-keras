@@ -78,5 +78,5 @@ class DenseNeuralNet:
         return np.maximum(0, x)
 
     def _softmax(self, x) -> np.array:
-        exp_x = np.exp(x)
-        return exp_x / np.sum(exp_x)
+        z = np.exp(x)
+        return z / np.sum(z)
