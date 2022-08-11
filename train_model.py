@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 # from dense_neural_net import DenseNeuralNet
-from Layers import Dense
+from layers import Dense
 from activation_functions import *
 
 # %% constants
@@ -17,12 +17,6 @@ dataset = pd.read_csv(dataset_path, names=labels)
 
 # %%
 dataset.head()
-
-# %%
-# dims = np.array([30, 10, 10, 2], dtype=int)
-dims = [30, 10, 10, 2]
-x = np.arange(0, 30, 1, dtype=int)
-print(x)
 
 # %%
 # model = DenseNeuralNet(dims)
@@ -40,5 +34,5 @@ layer = Dense((4, 2), activation=SoftMax, init_method='xavier', distribution='no
 layer.weights
 
 #%%
-layer._forward([1, 2, 1, 2.5], activation=SoftMax)
+layer.forward([1, 2, 1, 2.5], activation=SoftMax)
 # %%

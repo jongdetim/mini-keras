@@ -4,10 +4,12 @@ import numpy as np
 
 class Activation(ABC):
     @staticmethod
+    @abstractmethod
     def forward(x: np.array) -> np.array:
         pass
 
     @staticmethod
+    @abstractmethod
     def backward(x: np.array) -> np.array:
         pass
 
