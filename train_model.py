@@ -1,10 +1,24 @@
+#%%
+%load_ext autoreload
+%autoreload 2
+
 # %%
 import numpy as np
 import pandas as pd
 
 # from dense_neural_net import DenseNeuralNet
 from layers import Dense
+from models import Sequential
 from activation_functions import *
+from loss_functions import *
+
+#%% TESTING
+model = Sequential([Dense((2, 3), ReLU),
+                    Dense((3, 11), Sigmoid),
+                    Dense((11, 2), SoftMax)], BinaryCrossEntropy)
+
+#%%
+model.fit(np.array([3, 15]), np.array([0, 1]))
 
 # %% constants
 dataset_path = 'datasets/data-multilayer-perceptron.csv'

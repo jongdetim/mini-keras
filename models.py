@@ -20,12 +20,12 @@ class Sequential:
             raise ValueError(
                 "layers argument is empty. should contain atleast one layer")
         for layer in self.layers:
-            if not issubclass(layer, Layer):
+            if not isinstance(layer, Layer):
                 raise TypeError(
                     "layers argument should be a list of classes that inherit from Layer class")
         if len(self.layers) > 1:
-            for fan_out, fan_in in zip(self.layers[:-1].dimensions[1], self.layers[1:].dimensions[0]):
-                if fan_out != fan_in:
+            for fan_out, fan_in in zip(self.layers[:-1], self.layers[1:]):
+                if fan_out.dimensions[1] != fan_in.dimensions[0]:
                     raise ValueError("amount of output neurons of every layer should " +
                                      "correspond to amount of input neurons in next layer")
 
@@ -37,9 +37,9 @@ class Sequential:
         for epoch in range(epochs):
             output = self._forward_propagation(X)
 
-            error += self.loss_function.forward(Y, output)
-
-            gradient = self.loss_function.backward(Y, output)
+            error += self.loss_function.forward(output, Y)
+            # gebruiken we de error niet voor loss function backprop?
+            gradient = self.loss_function.backward(output, Y)
             self._backward_propagation(gradient, learning_rate)
 
     def _forward_propagation(self, X) -> np.array:

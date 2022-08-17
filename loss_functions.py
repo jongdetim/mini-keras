@@ -5,21 +5,21 @@ import numpy as np
 class Loss(ABC):
     @staticmethod
     @abstractmethod
-    def forward(x: np.array) -> np.array:
+    def forward(prediction: np.array, truth: np.array) -> np.array:
         pass
 
     @staticmethod
     @abstractmethod
-    def backward(x: np.array) -> np.array:
+    def backward(prediction: np.array, truth: np.array) -> np.array:
         pass
 
 
 class BinaryCrossEntropy(Loss):
     @staticmethod
-    def forward(x: np.array) -> np.array:
+    def forward(prediction: np.array, truth: np.array) -> np.array:
         pass
 
     @staticmethod
-    def backward(x: np.array) -> np.array:
+    def backward(prediction: np.array, truth: np.array) -> np.array:
         pass
 
