@@ -49,6 +49,7 @@ class SoftMax(Activation):
     @staticmethod
     def forward(x: np.array) -> np.array:
         z = np.exp(x)
+        # z = np.exp(x - np.max(x))
         return z / np.sum(z)
 
     @staticmethod

@@ -37,6 +37,7 @@ class Sequential:
         for epoch in range(epochs):
             output = self._forward_propagation(X)
 
+            print(output)
             error += self.loss_function.forward(output, Y)
             # gebruiken we de error niet voor loss function backprop?
             gradient = self.loss_function.backward(output, Y)
