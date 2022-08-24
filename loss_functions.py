@@ -24,3 +24,4 @@ class BinaryCrossEntropy(Loss):
     @staticmethod
     def backward(prediction: np.array, truth: np.array) -> np.array:
         return -(truth / prediction) + ((1 - truth) / (1 - prediction))
+    #    TODO: have to clip prediction value to avoid divide by zero!
