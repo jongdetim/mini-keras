@@ -32,23 +32,30 @@ class Sequential:
     def fit(self, X, Y, epochs: int = 1000, learning_rate: float = 0.01, stochastic: bool = False):
         self._gradient_descent(X, Y, epochs, learning_rate, stochastic)
 
-    def _gradient_descent(self, X, Y, epochs: int = 1000, learning_rate: float = 0.01, stochastic=False):
-        error = 0
+    def _gradient_descent(self, X, Y, epochs, learning_rate, stochastic):
+        error = []
         for epoch in range(epochs):
             output = self._forward_propagation(X)
 
-            print(output)
-            error += self.loss_function.forward(output, Y)
-            # gebruiken we de error niet voor loss function backprop?
+            print("model output:", output)
+            # Y must be one-hot encoded first, so that it matches output
+            error.append(self.loss_function.forward(output, Y))
+
             gradient = self.loss_function.backward(output, Y)
+            print("model loss gradient:", gradient)
             self._backward_propagation(gradient, learning_rate)
+        print(error)
+        import matplotlib.pyplot as plt
+        plt.plot(range(len(error)), error, 'r')
+        plt.show()
 
     def _forward_propagation(self, X) -> np.array:
         output = X
         for layer in self.layers:
-            output = layer.forward(output, activation=layer.activation)
+            output = layer.forward(output)
         return output
 
-    def _backward_propagation(self, gradient, learning_rate: float = 0.01) -> np.array:
-        for layer in reversed(self.layers):
+    def _backward_propagation(self, gradient, learning_rate) -> np.array:
+        for i, layer in enumerate(reversed(self.layers)):
+            print("layer from back to front:", i)
             gradient = layer.backward(gradient, learning_rate)

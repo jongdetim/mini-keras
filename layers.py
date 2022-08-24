@@ -11,11 +11,11 @@ class Layer(ABC):
         self.dimensions = dimensions
 
     @abstractmethod
-    def forward(self, x, activation=None):
+    def forward(self, x):
         pass
 
     @abstractmethod
-    def backward(self, output_gradient, learning_rate, activation=None):
+    def backward(self, output_gradient, learning_rate):
         pass
 
 
@@ -53,36 +53,59 @@ class Dense(Layer):
             self.weights = self._xavier_init(fan_in, fan_out)
         elif self.init_method == 'normal':
             self.weights = self._normal_init(fan_in, fan_out)
-        self.biases = np.zeros(fan_out)
+        self.biases = np.zeros((fan_out, 1))
 
     def _normal_init(self, fan_in: int, fan_out: int) -> np.array:
         if self.distribution in ['normal','gaussian']:
-            return np.random.normal(loc=0.0, scale=0.02, size=(fan_in, fan_out))
+            return np.random.normal(loc=0.0, scale=0.02, size=(fan_out, fan_in))
         if self.distribution == 'uniform':
-            return np.random.uniform(low=-0.05, high=0.05, size=(fan_in, fan_out))
+            return np.random.uniform(low=-0.05, high=0.05, size=(fan_out, fan_in))
         raise ValueError("distribution is invalid!")
 
     def _xavier_init(self, fan_in: int, fan_out: int) -> np.array:
         if self.distribution in ['normal','gaussian']:
             limit = np.sqrt(2 / float(fan_in + fan_out))
-            return np.random.normal(loc=0.0, scale=limit, size=(fan_in, fan_out))
+            return np.random.normal(loc=0.0, scale=limit, size=(fan_out, fan_in))
         if self.distribution == 'uniform':
             limit = np.sqrt(6 / float(fan_in + fan_out))
-            return np.random.uniform(low=-limit, high=limit, size=(fan_in, fan_out))
+            return np.random.uniform(low=-limit, high=limit, size=(fan_out, fan_in))
         raise ValueError("distribution is invalid!")
 
-    def forward(self, x, activation=None) -> np.array:
+    def forward(self, x) -> np.array:
         self.input = x
-        z = self.weights.T.dot(x) + self.biases
-        self.output = z #<- currently saves output BEFORE activation function is applied!! not sure if correct
-        if activation:
-            z = activation.forward(z)
+        # print(x.shape)
+        # print(self.biases.shape)
+        # print(self.weights.T.dot(x))
+        z = self.weights.dot(x) + self.biases
+        self.output = z
+        if self.activation:
+            z = self.activation.forward(z)
         return z
 
-    def backward(self, output_gradient, learning_rate, activation=None):
-        gradient = np.multiply(output_gradient, activation.backward(self.output)) #<- gotta check if this is correct!
+    # def backward(self, output_gradient, learning_rate):
+    #     gradient = np.multiply(output_gradient, self.activation.backward(self.output)) #<- gotta check if this is correct!
+    #     weights_gradient = np.dot(gradient, self.input.T)
+    #     input_gradient = np.dot(self.weights.T, gradient)
+    #     self.weights -= learning_rate * weights_gradient
+    #     self.biases -= learning_rate * gradient
+    #     return input_gradient
+
+    def backward(self, output_gradient, learning_rate):
+        gradient = self.activation.backward(self.output, output_gradient) #<- gotta check if this is correct!
         weights_gradient = np.dot(gradient, self.input.T)
         input_gradient = np.dot(self.weights.T, gradient)
         self.weights -= learning_rate * weights_gradient
         self.biases -= learning_rate * gradient
         return input_gradient
+
+    # def backward(self, output_gradient, learning_rate):
+    #     print(output_gradient, self.output, self.activation.backward(self.output))
+    #     gradient = np.dot(output_gradient, self.activation.backward(self.output)).reshape(-1,1) #<- gotta check if this is correct!
+    #     print("gradient:", gradient, "self.input:", self.input, "self.weights:", self.weights)
+    #     weights_gradient = np.dot(gradient, self.input.reshape(1, -1))
+    #     input_gradient = np.dot(self.weights, gradient)
+    #     print(weights_gradient.shape, self.weights.shape)
+    #     self.weights -= learning_rate * weights_gradient.T
+    #     self.biases -= learning_rate * gradient
+    #     print(weights_gradient, "dad", input_gradient)
+    #     return input_gradient

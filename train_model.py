@@ -13,12 +13,12 @@ from activation_functions import *
 from loss_functions import *
 
 #%% TESTING
-model = Sequential([Dense((2, 3), ReLU),
-                    Dense((3, 11), Sigmoid),
+model = Sequential([Dense((2, 3), Tanh),
+                    Dense((3, 11), Tanh),
                     Dense((11, 2), SoftMax)], BinaryCrossEntropy)
 
 #%%
-model.fit(np.array([3, 15]), np.array([0, 1]))
+model.fit(np.array([3, 15]).reshape(-1, 1), np.array([0, 1]).reshape(-1, 1), epochs=500, learning_rate=0.01)
 
 # %% constants
 dataset_path = 'datasets/data-multilayer-perceptron.csv'
