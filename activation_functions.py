@@ -52,12 +52,12 @@ class SoftMax(Activation):
         # z = np.exp(x - np.max(x))
         return z / np.sum(z)
 
-    # @staticmethod
-    # def backward(x: np.array) -> np.array:
-    #     s = x.reshape(-1, 1)
-    #     return np.diagflat(s) - np.dot(s, s.T)
-
     @staticmethod
     def backward(x: np.array, gradient: np.array) -> np.array:
-        n = np.size(x)
-        return np.dot((np.identity(n) - x.T) * x, gradient)
+        s = x.reshape(-1, 1)
+        return np.dot(np.diagflat(s) - np.dot(s, s.T), gradient)
+
+    # @staticmethod
+    # def backward(x: np.array, gradient: np.array) -> np.array:
+    #     n = np.size(x)
+    #     return np.dot((np.identity(n) - x.T) * x, gradient)
