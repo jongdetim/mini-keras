@@ -16,13 +16,16 @@ class Loss(ABC):
 
 class BinaryCrossEntropy(Loss):
     @staticmethod
-    def forward(prediction: np.array, truth: np.array) -> np.array:
-        print("truth is: ", truth)
+    def forward(prediction: np.array, truth: np.array, epsilon=0.000001) -> np.array:
+        prediction = np.clip(prediction, epsilon, 1 - epsilon)
         size = np.shape(truth)[0] #or [1] ?
-        print("size is ", size)
         return -1 / size * np.sum(((truth * np.log(prediction)) + ((1 - truth) * np.log(1 - prediction))))
 
     @staticmethod
-    def backward(prediction: np.array, truth: np.array) -> np.array:
-        return ((1 - truth) / (1 - prediction) - truth / prediction) / np.size(truth)
-        #    TODO: have to clip prediction value to avoid divide by zero!
+    def backward(prediction: np.array, truth: np.array, epsilon=0.000001) -> np.array:
+        # return np.array([-0.5, 0.5]).reshape(-1, 1)
+            
+        prediction = np.clip(prediction, epsilon, 1 - epsilon)
+        return (prediction - truth) / (prediction * (1 - prediction))
+        # prediction = np.clip(prediction, epsilon, 1 - epsilon)
+        # return (prediction - truth) / (prediction * (1 - prediction)) / np.size(truth)

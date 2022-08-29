@@ -18,17 +18,20 @@ model = Sequential([Dense((2, 3), Tanh),
                     Dense((11, 2), SoftMax)], BinaryCrossEntropy)
 
 #%% TEST [2, 1] logistic regression
-model = Sequential([Dense((2, 1), Sigmoid)], BinaryCrossEntropy)
+model = Sequential([Dense((2, 2), Sigmoid)], BinaryCrossEntropy)
 
 #%% TEST input + 2 layers
 model = Sequential([Dense((2, 4), Sigmoid),
-                    Dense((4, 1), Sigmoid)], BinaryCrossEntropy)
+                    Dense((4, 2), Sigmoid)], BinaryCrossEntropy)
 # why does the additional layer converge slower than logistic regression?
 # -> because the data is easily linearly separable. less noisy parameters
 
 #%% TEST input + 2 BIG layers
-model = Sequential([Dense((2, 40), Sigmoid),
-                    Dense((40, 1), Sigmoid)], BinaryCrossEntropy)
+model = Sequential([Dense((2, 10), ReLU),
+                    Dense((10, 20), ReLU),
+                    Dense((20, 30), ReLU),
+                    Dense((30, 40), ReLU),
+                    Dense((40, 2), SoftMax)], BinaryCrossEntropy)
 # bigger model learns faster
 
 #%% TEST input + 2 layers & 2 output
@@ -46,6 +49,18 @@ model = Sequential([Dense((2, 2), Sigmoid),
 
 #%% 
 model.fit(np.array([3, 15]).reshape(-1, 1), np.array([1, 0]).reshape(-1, 1), epochs=500, learning_rate=0.01)
+
+#%%
+SoftMax.backward(np.array([0.3, 0.5]), np.array([0.4, -0.6]))
+
+#%%
+SoftMax.backward2(np.array([0.3, 0.5]), np.array([0.4, -0.6]))
+
+#%%
+SoftMax.backward3(np.array([0.3, 0.5]), np.array([0.4, -0.6]))
+
+#%%
+SoftMax.backward4(np.array([0.3, 0.5]).reshape(-1, 1), np.array([0.4, 0.9]).reshape(-1, 1))
 
 # %% constants
 dataset_path = 'datasets/data-multilayer-perceptron.csv'
