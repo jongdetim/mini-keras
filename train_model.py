@@ -20,6 +20,11 @@ model = Sequential([Dense((2, 3), Tanh),
 #%% TEST [2, 1] logistic regression
 model = Sequential([Dense((2, 2), Sigmoid)], BinaryCrossEntropy)
 
+#%% TEST - IT LEARNS SLOWER WITH ACTIVATED LAYERS! why?
+model = Sequential([Dense((2, 1), activation=ReLU),
+                    Dense((1, 1), activation=ReLU),
+                    Dense((1, 1), activation=Sigmoid)], BinaryCrossEntropy)
+
 #%% TEST input + 2 layers
 model = Sequential([Dense((2, 4), Sigmoid),
                     Dense((4, 2), Sigmoid)], BinaryCrossEntropy)
@@ -48,7 +53,12 @@ model = Sequential([Dense((2, 2), Sigmoid),
 # SoftMax is malfunctioning
 
 #%% 
-model.fit(np.array([3, 15]).reshape(-1, 1), np.array([1, 0]).reshape(-1, 1), epochs=500, learning_rate=0.01)
+model.fit(np.array([20, -10]).reshape(-1, 1), np.array([1]).reshape(-1, 1), epochs=500, learning_rate=0.01)
+
+#%%
+for layer in model.layers:
+    print("weights:", layer.weights)
+    print("biases:", layer.biases)
 
 #%%
 SoftMax.backward(np.array([0.3, 0.5]), np.array([0.4, -0.6]))

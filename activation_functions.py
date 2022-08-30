@@ -5,44 +5,44 @@ import numpy as np
 class Activation(ABC):
     @staticmethod
     @abstractmethod
-    def forward(x: np.array) -> np.array:
+    def forward(z: np.array) -> np.array:
         pass
 
     @staticmethod
     @abstractmethod
-    def backward(x: np.array, gradient: np.array) -> np.array:
+    def backward(z: np.array, gradient: np.array) -> np.array:
         pass
 
 
 class Sigmoid(Activation):
     @staticmethod
-    def forward(x: np.array) -> np.array:
-        return 1 / (1 + np.exp(-x))
+    def forward(z: np.array) -> np.array:
+        return 1 / (1 + np.exp(-z))
 
     @staticmethod
-    def backward(x: np.array, gradient: np.array) -> np.array:
-        s = Sigmoid.forward(x)
-        return np.multiply(s * (1 - s), gradient)
+    def backward(z: np.array, gradient: np.array) -> np.array:
+        s = Sigmoid.forward(z)
+        return np.multiply(gradient, s * (1 - s))
 
 
 class ReLU(Activation):
     @staticmethod
-    def forward(x: np.array) -> np.array:
-        return np.maximum(0, x)
+    def forward(z: np.array) -> np.array:
+        return np.maximum(0, z)
 
     @staticmethod
-    def backward(x: np.array, gradient: np.array) -> np.array:
-        return np.multiply(x > 0, gradient)
+    def backward(z: np.array, gradient: np.array) -> np.array:
+        return np.multiply(z > 0, gradient)
 
 
 class Tanh(Activation):
     @staticmethod
-    def forward(x: np.array) -> np.array:
-        return (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
+    def forward(z: np.array) -> np.array:
+        return (np.exp(z) - np.exp(-z)) / (np.exp(z) + np.exp(-z))
 
     @staticmethod
-    def backward(x: np.array, gradient: np.array) -> np.array:
-        return np.multiply(1 - Tanh.forward(x) ** 2, gradient)
+    def backward(z: np.array, gradient: np.array) -> np.array:
+        return np.multiply(1 - Tanh.forward(z) ** 2, gradient)
 
 
 class SoftMax(Activation):
