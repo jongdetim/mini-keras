@@ -22,7 +22,7 @@ class Sigmoid(Activation):
     @staticmethod
     def backward(z: np.array, gradient: np.array) -> np.array:
         s = Sigmoid.forward(z)
-        return np.multiply(gradient, s * (1 - s))
+        return np.multiply(s * (1 - s), gradient)
 
 
 class ReLU(Activation):
@@ -50,7 +50,7 @@ class SoftMax(Activation):
     def forward(x: np.array, epsilon=0.000001) -> np.array:
         # z = np.exp(x) #numerically unstable
         z = np.exp(x - np.max(x))
-        return z / np.sum(z)
+        return z / np.sum(z, axis=0)
 
     @staticmethod
     def backward2(x: np.array, gradient: np.array) -> np.array:
@@ -64,9 +64,11 @@ class SoftMax(Activation):
     def backward(x: np.array, gradient: np.array) -> np.array:
         # x = SoftMax.forward(x)
         x = x.reshape(-1, 1)
-        gradient = gradient.reshape(-1, 1)
+        gradient = gradient.reshape(1, -1)
         n = np.size(x)
-        return (gradient @ (np.identity(n) - x.T @ x))
+        print(np.identity(n) - x.T @ x)
+        print(gradient)
+        return np.dot(gradient, np.identity(n) - x.T @ x).T
 
     @staticmethod
     def backward3(x: np.array, gradient: np.array) -> np.array:
@@ -74,8 +76,9 @@ class SoftMax(Activation):
         x = x.reshape(1, -1)
         gradient = gradient.reshape(1, -1)
         n = np.size(x)
-        return (gradient @ (np.identity(n) - x.T @ x)).T
+        return np.dot(gradient, np.identity(n) - x.T @ x)
     
+    @staticmethod
     def backward4(x, gradient): # Best implementation (VERY FAST)
         s = SoftMax.forward(x)
         a = np.eye(s.shape[-1])
