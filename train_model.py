@@ -23,7 +23,7 @@ model = Sequential([Dense((2, 1), Sigmoid)], BinaryCrossEntropy)
 #%% TEST - IT LEARNS SLOWER WITH ACTIVATED LAYERS! why?
 model = Sequential([Dense((2, 1), activation=ReLU),
                     Dense((1, 1), activation=ReLU),
-                    Dense((1, 1), activation=Sigmoid)], BinaryCrossEntropy)
+                    Dense((1, 2), activation=SoftMax)], BinaryCrossEntropy)
 
 #%% TEST input + 2 layers
 model = Sequential([Dense((2, 4), Sigmoid),
@@ -56,6 +56,12 @@ model = Sequential([Dense((2, 2), Sigmoid),
 model.fit(np.array([0.3, 0.15]).reshape(-1, 1), np.array([1, 0]).reshape(-1, 1), epochs=500, learning_rate=0.01)
 
 #%%
+model._forward_propagation(np.array([0.000000000000000003, 0.0000000000000015]).reshape(-1, 1))
+
+#%%
+SoftMax.forward(np.array([800000, -800000]).reshape(-1, 1))
+
+#%%
 for layer in model.layers:
     print("weights:", layer.weights)
     print("biases:", layer.biases)
@@ -67,16 +73,25 @@ soft = SoftMax.forward(v)
 BinaryCrossEntropy.forward(soft, truth)
 
 #%%
-SoftMax.backward(np.array([0.3, 0.5]), np.array([0.4, -0.6]))
+inputt = np.array([1, 2]).reshape(-1, 1)
+out = SoftMax.forward(inputt)
+truth = np.array([0, 1]).reshape(-1, 1)
+
+loss = BinaryCrossEntropy.forward(out, truth)
+print(SoftMax.backward(inputt, BinaryCrossEntropy.backward(out, truth)))
+print(out - truth)
 
 #%%
-SoftMax.backward2(np.array([0.3, 0.5]), np.array([0.4, -0.6]))
-
-#%%
-SoftMax.backward3(np.array([0.3, 0.5]), np.array([0.4, -0.6]))
-
-#%%
-SoftMax.backward4(np.array([0.3, 0.5]).reshape(-1, 1), np.array([0.4, 0.9]).reshape(-1, 1))
+print(SoftMax.backward(np.array([0.3, 0.5]), np.array([0.4, -0.6])))
+print()
+print(SoftMax.backward2(np.array([0.3, 0.5]), np.array([0.4, -0.6])))
+print()
+print(SoftMax.backward3(np.array([0.3, 0.5]), np.array([0.4, -0.6])))
+print()
+print(SoftMax.backward4(np.array([0.3, 0.5]).reshape(-1, 1), np.array([0.4, 0.9]).reshape(-1, 1)))
+print()
+print(SoftMax.backward5(np.array([0.3, 0.5]).reshape(-1, 1), np.array([0.4, 0.9]).reshape(-1, 1)))
+print()
 
 # %% constants
 dataset_path = 'datasets/data-multilayer-perceptron.csv'
