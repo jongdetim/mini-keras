@@ -1,78 +1,117 @@
-#%%
+# %%
+from loss_functions import *
+from activation_functions import *
+from models import Sequential
+from layers import Dense
+import pandas as pd
+import numpy as np
 %load_ext autoreload
 %autoreload 2
 
 # %%
-import numpy as np
-import pandas as pd
 
 # from dense_neural_net import DenseNeuralNet
-from layers import Dense
-from models import Sequential
-from activation_functions import *
-from loss_functions import *
 
-#%% TESTING
-model = Sequential([Dense((2, 3), Tanh),
-                    Dense((3, 11), Tanh),
-                    Dense((11, 2), SoftMax)], BinaryCrossEntropy)
+# #%% TESTING
+# model = Sequential([Dense((2, 3), Tanh),
+#                     Dense((3, 11), Tanh),
+#                     Dense((11, 2), SoftMax)], BinaryCrossEntropy)
 
-#%% TEST [2, 1] logistic regression
-model = Sequential([Dense((2, 1), Sigmoid)], BinaryCrossEntropy)
+# #%% TEST [2, 1] logistic regression
+# model = Sequential([Dense((2, 1), Sigmoid)], BinaryCrossEntropy)
 
-#%% TEST - IT LEARNS SLOWER WITH ACTIVATED LAYERS! why?
-model = Sequential([Dense((2, 1), activation=ReLU),
-                    Dense((1, 1), activation=ReLU),
-                    Dense((1, 2), activation=SoftMax)], BinaryCrossEntropy)
+# %% TEST - IT LEARNS SLOWER WITH ACTIVATED LAYERS! why?
+model = Sequential([Dense((3, 5), activation=ReLU),
+                    Dense((5, 2), activation=SoftMax)], BinaryCrossEntropy)
 
-#%% TEST input + 2 layers
-model = Sequential([Dense((2, 4), Sigmoid),
-                    Dense((4, 2), Sigmoid)], BinaryCrossEntropy)
-# why does the additional layer converge slower than logistic regression?
-# -> because the data is easily linearly separable. less noisy parameters
+# #%% TEST input + 2 layers
+# model = Sequential([Dense((2, 4), Sigmoid),
+#                     Dense((4, 2), Sigmoid)], BinaryCrossEntropy)
+# # why does the additional layer converge slower than logistic regression?
+# # -> because sigmoid layers reduce convergence rate
 
-#%% TEST input + 2 BIG layers
-model = Sequential([Dense((2, 10), ReLU),
-                    Dense((10, 20), ReLU),
-                    Dense((20, 30), ReLU),
-                    Dense((30, 40), ReLU),
-                    Dense((40, 2), SoftMax)], BinaryCrossEntropy)
-# bigger model learns faster
+# #%% TEST input + 2 BIG layers
+# model = Sequential([Dense((2, 10), ReLU),
+#                     Dense((10, 20), ReLU),
+#                     Dense((20, 30), ReLU),
+#                     Dense((30, 40), ReLU),
+#                     Dense((40, 2), SoftMax)], BinaryCrossEntropy)
 
-#%% TEST input + 2 layers & 2 output
-model = Sequential([Dense((2, 4), Sigmoid),
-                    Dense((4, 2), Sigmoid)], BinaryCrossEntropy)
 
-#%% TEST many layers
-model = Sequential([Dense((2, 2), Sigmoid),
-                    Dense((2, 2), Sigmoid),
-                    Dense((2, 2), Sigmoid),
-                    Dense((2, 2), Sigmoid),
-                    Dense((2, 2), Sigmoid),
-                    Dense((2, 2), SoftMax)], BinaryCrossEntropy)
-# SoftMax is malfunctioning
+# #%% TEST input + 2 layers & 2 output
+# model = Sequential([Dense((2, 4), Sigmoid),
+#                     Dense((4, 2), Sigmoid)], BinaryCrossEntropy)
 
-#%% 
-model.fit(np.array([0.3, 0.15]).reshape(-1, 1), np.array([1, 0]).reshape(-1, 1), epochs=500, learning_rate=0.01)
+# #%% TEST many layers
+# model = Sequential([Dense((2, 2), Sigmoid),
+#                     Dense((2, 2), Sigmoid),
+#                     Dense((2, 2), Sigmoid),
+#                     Dense((2, 2), Sigmoid),
+#                     Dense((2, 2), Sigmoid),
+#                     Dense((2, 2), SoftMax)], BinaryCrossEntropy)
+
+# %% test data
+x = np.array([np.array([0.3, 0.4, 1.3]).reshape(-1, 1),
+             np.array([0.9, 0.5, 0.3]).reshape(-1, 1)])
+x = np.array([[0.3, 0.4, 1.3], [0.9, 0.5, 0.3]])
+y = np.array([np.array([1, 0]).reshape(-1, 1),
+             np.array([0, 1]).reshape(-1, 1)])
+y = np.array([[1, 0], [0, 1]])
+print(x, y)
+print(x.shape, y.shape)
+# x = np.array([[[0.3, 0.4, 1.3]],[[0.9, 0.5, 0.3]]])
+# print(x, y)
+
+# %%
+gradient = np.array([[-0.25256681,  0.26752522],
+                     [0.25256681, -0.26752522]])
+x = np.array([[-0.25256681,  0.26752522],
+              [0.25256681, -0.26752522]])
+test = SoftMax.backward6(x, gradient)
+print(test.shape, test)
 
 #%%
-model._forward_propagation(np.array([0.000000000000000003, 0.0000000000000015]).reshape(-1, 1))
+gradient = np.array([[-0.25256681,  0.26752522]])
+x = np.array([[-0.25256681,  0.26752522]])
+test = SoftMax.backward4(x, gradient)
+print(test.shape, test)
 
 #%%
-SoftMax.forward(np.array([800000, -800000]).reshape(-1, 1))
+gradient = np.array([[-0.25256681,  0.26752522]]).reshape(-1, 1)
+x = np.array([[-0.25256681,  0.26752522]]).reshape(-1, 1)
+test = SoftMax.backward(x, gradient)
+print(test.shape, test)
 
 #%%
+z = np.array([[[ 0.23470697, -0.23733954],
+  [-0.23733954, 0.23292789]],
+
+ [[ 0.23470697, -0.23034426],
+  [-0.23034426,  0.23292789]]])
+
+np.dot(z, np.array([[0.5, 0.2], [0.3, 0.8]]))
+
+#%%
+z = np.array([[ 0.23470697, -0.23733954],
+  [-0.23733954, 0.23292789]])
+
+np.dot(z, np.array([0.5, 0.2]))
+
+# %%
+model.fit(x, y, epochs=500, learning_rate=0.01, stochastic=False)
+
+# %%
 for layer in model.layers:
     print("weights:", layer.weights)
     print("biases:", layer.biases)
 
-#%%
+# %%
 v = np.array([-1.0, -1.0, 1.0])
 truth = np.array([0, 1, 0])
 soft = SoftMax.forward(v)
 BinaryCrossEntropy.forward(soft, truth)
 
-#%%
+# %%
 inputt = np.array([1, 2]).reshape(-1, 1)
 out = SoftMax.forward(inputt)
 truth = np.array([0, 1]).reshape(-1, 1)
@@ -81,16 +120,18 @@ loss = BinaryCrossEntropy.forward(out, truth)
 print(SoftMax.backward(inputt, BinaryCrossEntropy.backward(out, truth)))
 print(out - truth)
 
-#%%
+# %%
 print(SoftMax.backward(np.array([0.3, 0.5]), np.array([0.4, -0.6])))
 print()
 print(SoftMax.backward2(np.array([0.3, 0.5]), np.array([0.4, -0.6])))
 print()
 print(SoftMax.backward3(np.array([0.3, 0.5]), np.array([0.4, -0.6])))
 print()
-print(SoftMax.backward4(np.array([0.3, 0.5]).reshape(-1, 1), np.array([0.4, 0.9]).reshape(-1, 1)))
+print(SoftMax.backward4(
+    np.array([0.3, 0.5]).reshape(-1, 1), np.array([0.4, 0.9]).reshape(-1, 1)))
 print()
-print(SoftMax.backward5(np.array([0.3, 0.5]).reshape(-1, 1), np.array([0.4, 0.9]).reshape(-1, 1)))
+print(SoftMax.backward5(
+    np.array([0.3, 0.5]).reshape(-1, 1), np.array([0.4, 0.9]).reshape(-1, 1)))
 print()
 
 # %% constants
@@ -111,15 +152,18 @@ dataset.head()
 # %%
 # print(model._forward_propagation(x, model._sigmoid))
 
+
 def clean_data(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
-# %%
-layer = Dense((4, 2), activation=SoftMax, init_method='xavier', distribution='normal')
 
-#%%
+# %%
+layer = Dense((4, 2), activation=SoftMax,
+              init_method='xavier', distribution='normal')
+
+# %%
 layer.weights
 
-#%%
+# %%
 layer.forward([1, 2, 1, 2.5], activation=SoftMax)
 # %%

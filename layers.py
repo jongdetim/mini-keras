@@ -92,8 +92,10 @@ class Dense(Layer):
 
     def backward(self, output_gradient, learning_rate):
         gradient = self.activation.backward(self.output, output_gradient) #<- gotta check if this is correct!
-        print("activation gradient:", gradient)
+        # print(output_gradient, self.output, gradient)
+        # print("activation gradient:", gradient)
         weights_gradient = np.dot(gradient, self.input.T)
+        # print("weights gradient:", weights_gradient)
         input_gradient = np.dot(self.weights.T, gradient)
         self.weights -= learning_rate * weights_gradient
         self.biases -= learning_rate * gradient

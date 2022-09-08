@@ -54,7 +54,11 @@ class SoftMax(Activation):
 
     @staticmethod
     def backward(x: np.array, gradient: np.array) -> np.array:
-        s = SoftMax.forward(x).reshape(-1, 1)
+        # s = SoftMax.forward(x).reshape(-1, 1)
+        s = SoftMax.forward(x)
+        # print(s)
+        # print(np.diagflat(s))
+        # print(x)
         return np.dot(np.diagflat(s) - np.dot(s, s.T), gradient)
 
     # @staticmethod
@@ -81,13 +85,17 @@ class SoftMax(Activation):
     #     n = np.size(x)
     #     return np.identity(n) - x.T @ x
     
-    # @staticmethod
-    # def backward4(x, gradient): # Best implementation (VERY FAST)
-    #     s = SoftMax.forward(x)
-    #     a = np.eye(s.shape[-1])
-    #     temp1 = np.zeros((s.shape[0], s.shape[1], s.shape[1]),dtype=np.float32)
-    #     temp2 = np.zeros((s.shape[0], s.shape[1], s.shape[1]),dtype=np.float32)
-    #     temp1 = np.einsum('ij,jk->ijk',s,a)
-    #     temp2 = np.einsum('ij,ik->ijk',s,s)
-    #     print(temp1-temp2)
-    #     return np.multiply(temp1-temp2, gradient)
+    @staticmethod
+    def backward4(x, gradient): # Best implementation (VERY FAST)
+        s = SoftMax.forward(x)
+        a = np.eye(s.shape[-1])
+        # temp1 = np.zeros((s.shape[0], s.shape[1], s.shape[1]),dtype=np.float32)
+        # temp2 = np.zeros((s.shape[0], s.shape[1], s.shape[1]),dtype=np.float32)
+        temp1 = np.einsum('ij,jk->ijk',s,a)
+        temp2 = np.einsum('ij,ik->ijk',s,s)
+        print(temp1-temp2)
+        return np.dot(temp1-temp2, gradient)
+
+    @staticmethod
+    def backward6(x, gradient):
+        return np.array([SoftMax.backward(row, gradient) for row in x])
