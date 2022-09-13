@@ -1,3 +1,7 @@
+#%%
+%load_ext autoreload
+%autoreload 2
+
 # %%
 from loss_functions import *
 from activation_functions import *
@@ -5,8 +9,6 @@ from models import Sequential
 from layers import Dense
 import pandas as pd
 import numpy as np
-%load_ext autoreload
-%autoreload 2
 
 # %%
 
@@ -63,22 +65,23 @@ print(x.shape, y.shape)
 # print(x, y)
 
 # %%
-gradient = np.array([[-0.25256681,  0.26752522],
-                     [0.25256681, -0.26752522]])
-x = np.array([[-0.25256681,  0.26752522],
-              [0.25256681, -0.26752522]])
-test = SoftMax.backward6(x, gradient)
-print(test.shape, test)
+gradient = np.array([[-0.5,  0],
+                     [0.8,  0]])
+x = np.array([[-0.25,  0.7],
+              [0, 0]]).T
+test = SoftMax.backward7(x, gradient)
+print(gradient.shape)
 
 #%%
-gradient = np.array([[-0.25256681,  0.26752522]])
-x = np.array([[-0.25256681,  0.26752522]])
+gradient = np.array([[-0.5,  0.8]]).reshape(-1, 1)
+print(gradient.shape)
+x = np.array([[-0.25,  0.7]]).reshape(-1, 1)
 test = SoftMax.backward4(x, gradient)
-print(test.shape, test)
+# print(test.shape, test)
 
 #%%
-gradient = np.array([[-0.25256681,  0.26752522]]).reshape(-1, 1)
-x = np.array([[-0.25256681,  0.26752522]]).reshape(-1, 1)
+gradient = np.array([[-0.5,  0.8]]).reshape(-1, 1)
+x = np.array([[-0.25,  0.7]]).reshape(-1, 1)
 test = SoftMax.backward(x, gradient)
 print(test.shape, test)
 
@@ -119,20 +122,6 @@ truth = np.array([0, 1]).reshape(-1, 1)
 loss = BinaryCrossEntropy.forward(out, truth)
 print(SoftMax.backward(inputt, BinaryCrossEntropy.backward(out, truth)))
 print(out - truth)
-
-# %%
-print(SoftMax.backward(np.array([0.3, 0.5]), np.array([0.4, -0.6])))
-print()
-print(SoftMax.backward2(np.array([0.3, 0.5]), np.array([0.4, -0.6])))
-print()
-print(SoftMax.backward3(np.array([0.3, 0.5]), np.array([0.4, -0.6])))
-print()
-print(SoftMax.backward4(
-    np.array([0.3, 0.5]).reshape(-1, 1), np.array([0.4, 0.9]).reshape(-1, 1)))
-print()
-print(SoftMax.backward5(
-    np.array([0.3, 0.5]).reshape(-1, 1), np.array([0.4, 0.9]).reshape(-1, 1)))
-print()
 
 # %% constants
 dataset_path = 'datasets/data-multilayer-perceptron.csv'

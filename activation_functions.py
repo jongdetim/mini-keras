@@ -56,8 +56,8 @@ class SoftMax(Activation):
     def backward(x: np.array, gradient: np.array) -> np.array:
         # s = SoftMax.forward(x).reshape(-1, 1)
         s = SoftMax.forward(x)
-        # print(s)
-        # print(np.diagflat(s))
+        print(gradient)
+        print("deriv:", np.diagflat(s) - np.dot(s, s.T))
         # print(x)
         return np.dot(np.diagflat(s) - np.dot(s, s.T), gradient)
 
@@ -84,17 +84,49 @@ class SoftMax(Activation):
     #     # gradient = gradient.reshape(1, -1)
     #     n = np.size(x)
     #     return np.identity(n) - x.T @ x
-    
+
     @staticmethod
-    def backward4(x, gradient): # Best implementation (VERY FAST)
+    def backward4(x, gradient):  # Best implementation (VERY FAST)
         s = SoftMax.forward(x)
         a = np.eye(s.shape[-1])
         # temp1 = np.zeros((s.shape[0], s.shape[1], s.shape[1]),dtype=np.float32)
         # temp2 = np.zeros((s.shape[0], s.shape[1], s.shape[1]),dtype=np.float32)
-        temp1 = np.einsum('ij,jk->ijk',s,a)
-        temp2 = np.einsum('ij,ik->ijk',s,s)
-        print(temp1-temp2)
-        return np.dot(temp1-temp2, gradient)
+        temp1 = np.einsum('ij,jk->ijk', s, a)
+        temp2 = np.einsum('ij,ik->ijk', s, s)
+        # print(temp1, temp2, temp1-temp2)
+        deriv = np.array(
+            [[[0.20110808, -0.20110808], [-0.20110808, 0.20110808]]])
+        # result = np.einsum('ijk,jk->jk', temp1-temp2, gradient)
+        result = np.einsum('ijk,ki->ji', deriv, gradient)
+        print("deriv:", deriv)
+        print("softmax:", s)
+        print("softmax_derivative:", temp1-temp2)
+        print("gradient:", gradient)
+        print("result:", result)
+        return result
+        # return np.dot(temp1-temp2, gradient)
+
+    @staticmethod
+    def backward7(x, gradient):  # Best implementation (VERY FAST)
+        s = SoftMax.forward(x)
+        a = np.eye(s.shape[-1])
+        # temp1 = np.zeros((s.shape[0], s.shape[1], s.shape[1]),dtype=np.float32)
+        # temp2 = np.zeros((s.shape[0], s.shape[1], s.shape[1]),dtype=np.float32)
+        temp1 = np.einsum('ij,kj->ijk', s, a)
+        temp2 = np.einsum('ij,ik->ijk', s, s)
+        # print(temp1, temp2, temp1-temp2)
+        deriv = np.array([[[0.20110808, -0.20110808], [-0.20110808, 0.20110808]],
+                          [[0.3, -0.2], [-0.5, 0.8]]])
+        # result = np.einsum('ijk,jk->jk', temp1-temp2, gradient)
+        print("deriv shape:", deriv.shape)
+        result = np.einsum('ijk,ki->ji', deriv, gradient)
+        print("deriv:", deriv)
+        print("softmax:", s)
+        print("softmax_derivative:", temp1-temp2)
+        print("gradient:", gradient)
+        print("result:", result)
+        return result
+        # return np.dot(temp1-temp2, gradient)
 
     @staticmethod
     def backward6(x, gradient):
