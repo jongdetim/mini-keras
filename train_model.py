@@ -67,8 +67,8 @@ print(x.shape, y.shape)
 # %%
 gradient = np.array([[-0.5,  0],
                      [0.8,  0]])
-x = np.array([[-0.25,  0.7],
-              [0, 0]]).T
+x = np.array([[-0.25,  0],
+              [0.7, 0]]).T
 test = SoftMax.backward7(x, gradient)
 print(gradient.shape)
 

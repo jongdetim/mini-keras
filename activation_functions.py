@@ -87,10 +87,10 @@ class SoftMax(Activation):
 
     @staticmethod
     def backward4(x, gradient):  # Best implementation (VERY FAST)
-        s = SoftMax.forward(x)
+        s = SoftMax.forward(x).T
         a = np.eye(s.shape[-1])
-        # temp1 = np.zeros((s.shape[0], s.shape[1], s.shape[1]),dtype=np.float32)
-        # temp2 = np.zeros((s.shape[0], s.shape[1], s.shape[1]),dtype=np.float32)
+        temp1 = np.zeros((s.shape[0], s.shape[1], s.shape[1]),dtype=np.float32)
+        temp2 = np.zeros((s.shape[0], s.shape[1], s.shape[1]),dtype=np.float32)
         temp1 = np.einsum('ij,jk->ijk', s, a)
         temp2 = np.einsum('ij,ik->ijk', s, s)
         # print(temp1, temp2, temp1-temp2)
