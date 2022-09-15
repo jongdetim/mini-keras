@@ -30,9 +30,9 @@ class Sequential:
                                      "correspond to amount of input neurons in next layer")
 
     def fit(self, X, Y, epochs: int = 1000, learning_rate: float = 0.01, stochastic: bool = True, verbose: bool = True):
-        if not Y.shape[0] == self.layers[-1].dimensions[1]:
+        if not Y.shape[1] == self.layers[-1].dimensions[1]:
             raise ValueError(
-                f"Y size ({Y.shape[0]}) should be equal to output layer size ({self.layers[-1].dimensions[1]})")
+                f"Y size ({Y.shape[1]}) should be equal to output layer size ({self.layers[-1].dimensions[1]})")
         if stochastic:
             self._stochastic_gradient_descent(X, Y, epochs, learning_rate, verbose)
         else:
@@ -42,7 +42,9 @@ class Sequential:
         error = []
 
         X = X.T
-        print(X)
+        # Y = Y.reshape(-1, Y.shape[1])
+        Y = Y.reshape(Y.shape[0], -1).T
+        print(Y.shape)
 
         for epoch in range(epochs):
             output = self._forward_propagation(X)

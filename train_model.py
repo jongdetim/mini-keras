@@ -55,50 +55,14 @@ model = Sequential([Dense((3, 5), activation=ReLU),
 # %% test data
 x = np.array([np.array([0.3, 0.4, 1.3]).reshape(-1, 1),
              np.array([0.9, 0.5, 0.3]).reshape(-1, 1)])
-x = np.array([[0.3, 0.4, 1.3], [0.9, 0.5, 0.3]])
+# x = np.array([[0.3, 0.4, 1.3], [0.3, 0.4, 1.3], [0.3, 0.4, 1.3], [0.3, 0.4, 1.3]])
+x = np.array([[0.3, 0.4, 1.3]])
 y = np.array([np.array([1, 0]).reshape(-1, 1),
              np.array([0, 1]).reshape(-1, 1)])
-y = np.array([[1, 0], [0, 1]])
+# y = np.array([[1, 0], [1, 0], [1, 0], [1, 0]])
+y = np.array([[1, 0]])
 print(x, y)
 print(x.shape, y.shape)
-# x = np.array([[[0.3, 0.4, 1.3]],[[0.9, 0.5, 0.3]]])
-# print(x, y)
-
-# %%
-gradient = np.array([[-0.5,  0],
-                     [0.8,  0]])
-x = np.array([[-0.25,  0],
-              [0.7, 0]]).T
-test = SoftMax.backward7(x, gradient)
-print(gradient.shape)
-
-#%%
-gradient = np.array([[-0.5,  0.8]]).reshape(-1, 1)
-print(gradient.shape)
-x = np.array([[-0.25,  0.7]]).reshape(-1, 1)
-test = SoftMax.backward4(x, gradient)
-# print(test.shape, test)
-
-#%%
-gradient = np.array([[-0.5,  0.8]]).reshape(-1, 1)
-x = np.array([[-0.25,  0.7]]).reshape(-1, 1)
-test = SoftMax.backward(x, gradient)
-print(test.shape, test)
-
-#%%
-z = np.array([[[ 0.23470697, -0.23733954],
-  [-0.23733954, 0.23292789]],
-
- [[ 0.23470697, -0.23034426],
-  [-0.23034426,  0.23292789]]])
-
-np.dot(z, np.array([[0.5, 0.2], [0.3, 0.8]]))
-
-#%%
-z = np.array([[ 0.23470697, -0.23733954],
-  [-0.23733954, 0.23292789]])
-
-np.dot(z, np.array([0.5, 0.2]))
 
 # %%
 model.fit(x, y, epochs=500, learning_rate=0.01, stochastic=False)
