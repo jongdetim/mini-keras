@@ -21,7 +21,7 @@ class Layer(ABC):
 
 class Dense(Layer):
     allowed_distributions = ['uniform', 'normal', 'gaussian']
-    allowed_init_methods = ['xavier', 'normal', ]
+    allowed_init_methods = ['xavier', 'normal']
 
     def __init__(self, dimensions: tuple, activation: Callable=None, weights=None,
                  biases=None, init_method='xavier', distribution='uniform'):

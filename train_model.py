@@ -49,7 +49,12 @@ print(X)
 model = Sequential([Dense((2, 5), activation=ReLU),
                     Dense((5, 2), activation=SoftMax)], BinaryCrossEntropy)
 
+# model.layers[0].weights = np.array([[-0.5, -0.3, -0.1, -1.3, -1],
+#                              [-0.2, -0.1, -0.8, -0.9, -1.8]]).T
+# model.layers[1].weights = np.array([[-0.5, -0.3, -0.1, -1.3, -1],
+#                              [-0.2, -0.1, -0.8, -0.9, -1.8]])
+
 # %%
-model.fit(X, Y, epochs=20, learning_rate=0.01, stochastic=False)
+model.fit(X, Y, epochs=100, learning_rate=0.01, stochastic=False)
 
 # %%
