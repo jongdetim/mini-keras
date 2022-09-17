@@ -1,0 +1,3 @@
+- test stochastic descent
+- pass seed to model on init
+- onehot encode
