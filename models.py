@@ -49,13 +49,13 @@ class Sequential:
         for epoch in range(epochs):
             output = self._forward_propagation(X)
 
-            print("model output:", output)
+            # print("model output:", output)
             # Y must be one-hot encoded first, so that it matches output
             error.append(self.loss_function.forward(output, Y))
 
             gradient = self.loss_function.backward(output, Y)
-            print("loss:", error[-1])
-            print("model loss gradient:", gradient)
+            # print("loss:", error[-1])
+            # print("model loss gradient:", gradient)
             self._backward_propagation(gradient, learning_rate)
             if verbose and (epoch + 1) % 50 == 0:
                 print(f"epoch: {epoch + 1}/{epochs}, error={error[-1]}")

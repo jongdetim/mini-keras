@@ -55,6 +55,9 @@ model = Sequential([Dense((2, 5), activation=ReLU),
 #                              [-0.2, -0.1, -0.8, -0.9, -1.8]])
 
 # %%
-model.fit(X, Y, epochs=100, learning_rate=0.01, stochastic=False)
+model.fit(X, Y, epochs=10000, learning_rate=0.1, stochastic=False)
 
 # %%
+for layer in model.layers:
+    print("weights:", layer.weights)
+    print("biases:", layer.biases)

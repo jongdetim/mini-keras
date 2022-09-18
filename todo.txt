@@ -1,4 +1,8 @@
-- Tanh is broken! probably derivative
+- mean of error
+- fix stochastic loop error list
+- compare stochastic to batch GD
+- implement minibatches
+- regularize function
 - test stochastic descent
 - pass seed to model on init
 - onehot encode
