@@ -42,9 +42,8 @@ class Sequential:
         error = []
 
         X = X.T
-        # Y = Y.reshape(-1, Y.shape[1])
         Y = Y.reshape(Y.shape[0], -1).T
-        print(Y.shape)
+        # print(Y.shape)
 
         for epoch in range(epochs):
             output = self._forward_propagation(X)
@@ -61,28 +60,34 @@ class Sequential:
                 print(f"epoch: {epoch + 1}/{epochs}, error={error[-1]}")
         # print(error)
         import matplotlib.pyplot as plt
-        plt.plot(range(len(error)), error, 'r')
+        plt.plot(range(1, len(error) + 1), error, 'r')
         plt.show()
 
     def _stochastic_gradient_descent(self, X, Y, epochs, learning_rate, verbose):
         error = []
+
+        # Y = Y.reshape(Y.shape[1], -1).T
+
         for epoch in range(epochs):
+            total_error = 0
             for i, sample in enumerate(X):
                 sample = sample.reshape(-1, 1)
                 output = self._forward_propagation(sample)
 
+                total_error += self.loss_function.forward(output, Y[i].reshape(-1, 1))
                 # print("model output:", output)
                 # Y must be one-hot encoded first, so that it matches output
-                error.append(self.loss_function.forward(output, Y[i].reshape(-1, 1)))
 
                 gradient = self.loss_function.backward(output, Y[i].reshape(-1, 1))
-                print("model loss gradient:", gradient)
+                # print("model loss gradient:", gradient)
                 self._backward_propagation(gradient, learning_rate)
-                if verbose and (epoch + 1) % 50 == 0:
-                    print(f"epoch: {epoch + 1}/{epochs}, error={error[-1]}")
+
+            error.append(total_error / len(X))
+            if verbose and (epoch + 1) % 50 == 0:
+                print(f"epoch: {epoch + 1}/{epochs}, error={error[-1]}")
         # print(error)
         import matplotlib.pyplot as plt
-        plt.plot(range(len(error)), error, 'r')
+        plt.plot(range(1, len(error) + 1), error, 'r')
         plt.show()
 
     def _forward_propagation(self, X) -> np.array:

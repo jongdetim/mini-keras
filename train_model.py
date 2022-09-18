@@ -41,21 +41,17 @@ dataset.head()
 Y, Y_labels = one_hot(dataset['diagnosis'].to_numpy())
 X = dataset[['mean radius', 'mean texture']].to_numpy()
 X = normalize_data(X)
-print(X)
-
-
+# print(X)
 
 # %%
 model = Sequential([Dense((2, 5), activation=ReLU),
                     Dense((5, 2), activation=SoftMax)], BinaryCrossEntropy)
 
-# model.layers[0].weights = np.array([[-0.5, -0.3, -0.1, -1.3, -1],
-#                              [-0.2, -0.1, -0.8, -0.9, -1.8]]).T
-# model.layers[1].weights = np.array([[-0.5, -0.3, -0.1, -1.3, -1],
-#                              [-0.2, -0.1, -0.8, -0.9, -1.8]])
-
 # %%
-model.fit(X, Y, epochs=10000, learning_rate=0.1, stochastic=False)
+model.fit(X, Y, epochs=100, learning_rate=0.0001, stochastic=True)
+
+#%%
+model.fit(X, Y, epochs=100, learning_rate=0.00001, stochastic=True)
 
 # %%
 for layer in model.layers:

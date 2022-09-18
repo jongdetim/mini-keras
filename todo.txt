@@ -1,5 +1,4 @@
-- mean of error
-- fix stochastic loop error list
+- error depends on learning rate only when doing stochastic! why??? >check SGD function
 - compare stochastic to batch GD
 - implement minibatches
 - regularize function
