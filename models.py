@@ -1,11 +1,15 @@
 from multiprocessing.sharedctypes import Value
 from typing import List, Callable
 import numpy as np
+import matplotlib.pyplot as plt
+
 from layers import Layer
 from loss_functions import *
 
 
 class Sequential:
+
+    allowed_output_types = ['numerical', 'exclusive', 'multi-label']
 
     def __init__(self, layers: List[Layer], loss_function: Callable):
         self.layers = layers
@@ -29,7 +33,7 @@ class Sequential:
                     raise ValueError("amount of output neurons of every layer should " +
                                      "correspond to amount of input neurons in next layer")
 
-    def fit(self, X, Y, epochs: int = 1000, learning_rate: float = 0.01, stochastic: bool = True, verbose: bool = True):
+    def fit(self, X, Y, epochs: int = 1000, learning_rate: float = 0.01, stochastic: bool = True, verbose: bool = True) -> None:
         if not Y.shape[1] == self.layers[-1].dimensions[1]:
             raise ValueError(
                 f"Y size ({Y.shape[1]}) should be equal to output layer size ({self.layers[-1].dimensions[1]})")
@@ -38,8 +42,31 @@ class Sequential:
         else:
             self._gradient_descent(X, Y, epochs, learning_rate, verbose)
 
+    def predict(self, X: np.ndarray, Y_labels: np.ndarray = None, output_type: str ='numerical', cutoff: float = 0.5) -> np.ndarray:
+        if output_type not in self.allowed_output_types:
+            raise ValueError(f"output_type has to be one of {self.allowed_output_types}")
+        if Y_labels is not None and len(Y_labels) is not self.layers[-1].dimensions[1]:
+            raise ValueError("Y_labels has to be same length as output neurons")
+        
+        X = X.T
+        Y = self._forward_propagation(X)
+
+        if output_type == 'numerical':
+            return Y.T
+        if output_type == 'exclusive':
+            return np.argmax(Y, axis=0) if Y_labels is None else Y_labels[np.argmax(Y, axis=0)]
+        if output_type == 'multi-label':
+            return Y >= cutoff if Y_labels is None \
+            else np.array(list((Y_labels[(Y >= cutoff)[i]] for i in range(Y.shape[0]))), dtype=object)
+
+    def loss(self, X: np.ndarray, Y: np.ndarray) -> int:
+        X = X.T
+        Y = Y.reshape(Y.shape[0], -1).T
+        pred = self._forward_propagation(X)
+        return self.loss_function.forward(pred, Y)
+
     def _gradient_descent(self, X, Y, epochs, learning_rate, verbose):
-        error = []
+        errors = []
 
         X = X.T
         Y = Y.reshape(Y.shape[0], -1).T
@@ -50,21 +77,22 @@ class Sequential:
 
             # print("model output:", output)
             # Y must be one-hot encoded first, so that it matches output
-            error.append(self.loss_function.forward(output, Y))
+            errors.append(self.loss_function.forward(output, Y))
 
             gradient = self.loss_function.backward(output, Y)
             # print("loss:", error[-1])
             # print("model loss gradient:", gradient)
             self._backward_propagation(gradient, learning_rate)
             if verbose and (epoch + 1) % 50 == 0:
-                print(f"epoch: {epoch + 1}/{epochs}, error={error[-1]}")
-        # print(error)
-        import matplotlib.pyplot as plt
-        plt.plot(range(1, len(error) + 1), error, 'r')
-        plt.show()
+                print(f"epoch: {epoch + 1}/{epochs}, error={errors[-1]}")
+
+        plot = True
+
+        if plot:
+            self._plot_error(X, Y, errors)
 
     def _stochastic_gradient_descent(self, X, Y, epochs, learning_rate, verbose):
-        error = []
+        errors = []
 
         # Y = Y.reshape(Y.shape[1], -1).T
 
@@ -82,13 +110,19 @@ class Sequential:
                 # print("model loss gradient:", gradient)
                 self._backward_propagation(gradient, learning_rate)
 
-            error.append(total_error / len(X))
+            errors.append(total_error / len(X))
             if verbose and (epoch + 1) % 50 == 0:
-                print(f"epoch: {epoch + 1}/{epochs}, error={error[-1]}")
+                print(f"epoch: {epoch + 1}/{epochs}, error={errors[-1]}")
+        
         # print(error)
-        import matplotlib.pyplot as plt
-        plt.plot(range(1, len(error) + 1), error, 'r')
-        plt.show()
+        # import matplotlib.pyplot as plt
+        # plt.plot(range(1, len(error) + 1), error, 'r')
+        # plt.show()
+
+        plot = True
+
+        if plot:
+            self._plot_error(X.T, Y.reshape(Y.shape[0], -1).T, errors)
 
     def _forward_propagation(self, X) -> np.array:
         output = X
@@ -98,6 +132,13 @@ class Sequential:
         return output
 
     def _backward_propagation(self, gradient, learning_rate) -> np.array:
-        for i, layer in enumerate(reversed(self.layers)):
-            # print("layer from back to front:", i)
+        for _, layer in enumerate(reversed(self.layers)):
+            # print("layer from back to front:", _)
             gradient = layer.backward(gradient, learning_rate)
+
+    def _plot_error(self, X, Y, errors):
+        output = self._forward_propagation(X)
+        errors.append(self.loss_function.forward(output, Y))
+        plt.plot(range(0, len(errors)), errors, 'r')
+        plt.locator_params(axis="x", integer=True, tight=True)
+        plt.show()
