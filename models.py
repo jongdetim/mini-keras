@@ -127,7 +127,7 @@ class Sequential:
         for epoch in range(epochs):
             i = indices[epoch]
             sample = X[i].reshape(-1, 1)
-            print(sample)
+
             output = self._forward_propagation(sample)
 
             errors.append(self.loss_function.forward(output, Y[i].reshape(-1, 1)))
@@ -150,8 +150,7 @@ class Sequential:
         return output
 
     def _backward_propagation(self, gradient, learning_rate) -> np.array:
-        for _, layer in enumerate(reversed(self.layers)):
-            # print("layer from back to front:", _)
+        for layer in reversed(self.layers):
             gradient = layer.backward(gradient, learning_rate)
 
     def _plot_error(self, X, Y, errors):
