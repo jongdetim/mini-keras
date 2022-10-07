@@ -28,8 +28,12 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
     pass
 
 def normalize_data(data):
-    data_norm = (data-data.min())/ (data.max() - data.min())
+    data_norm = (data - np.min(data, axis=0))/ (np.max(data, axis=0) - np.min(data, axis=0))
     return data_norm
+
+def standardize_data(data):
+    standardized_data = (data - np.mean(data, axis=0)) / np.std(data, axis=0)
+    return standardized_data
 
 # %% read file
 dataset = pd.read_csv(dataset_path, names=labels)
@@ -39,20 +43,22 @@ dataset.head()
 
 #%%
 Y, Y_labels = one_hot(dataset['diagnosis'].to_numpy())
-X = dataset[['mean radius', 'mean texture']].to_numpy()
-X = normalize_data(X)
-# print(X)
+X = dataset[['worst area', 'worst smoothness', 'mean texture']].to_numpy()
+print(X)
+X = standardize_data(X)
+print(len(X))
+print(X)
+print(np.mean(X, axis=0))
 
 # %%
 model = Sequential([Dense((2, 5), activation=ReLU),
                     Dense((5, 2), activation=SoftMax)], BinaryCrossEntropy)
 
 # %%
-model.fit(X[:], Y, epochs=2, learning_rate=0.01, stochastic=False)
+model.fit(X[:], Y, epochs=200, learning_rate=0.01, stochastic=False)
 
 #%%
-model.fit(X[:], Y, epochs=20, learning_rate=0.001, stochastic=True)
-# model.fit(X[:], Y, epochs=20, learning_rate=0.000000001, stochastic=True)
+model.fit(X[:], Y, epochs=100, learning_rate=0.00001, stochastic=True)
 
 #%%
 model.predict(X[0:5], Y_labels, output_type='exclusive')

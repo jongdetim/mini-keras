@@ -33,12 +33,12 @@ class Sequential:
                     raise ValueError("amount of output neurons of every layer should " +
                                      "correspond to amount of input neurons in next layer")
 
-    def fit(self, X, Y, epochs: int = 1000, learning_rate: float = 0.01, stochastic: bool = True, verbose: bool = True) -> None:
+    def fit(self, X, Y, epochs: int = 1000, learning_rate: float = 0.01, stochastic: bool = True, verbose: bool = True, seed: int = None) -> None:
         if not Y.shape[1] == self.layers[-1].dimensions[1]:
             raise ValueError(
                 f"Y size ({Y.shape[1]}) should be equal to output layer size ({self.layers[-1].dimensions[1]})")
         if stochastic:
-            self._stochastic_gradient_descent(X, Y, epochs, learning_rate, verbose)
+            self._stochastic_gradient_descent(X, Y, epochs, learning_rate, verbose, seed)
         else:
             self._gradient_descent(X, Y, epochs, learning_rate, verbose)
 
@@ -91,7 +91,7 @@ class Sequential:
         if plot:
             self._plot_error(X, Y, errors)
 
-    def _stochastic_gradient_descent(self, X, Y, epochs, learning_rate, verbose):
+    def _stochastic_gradient_descent_all(self, X, Y, epochs, learning_rate, verbose, seed):
         errors = []
 
         # Y = Y.reshape(Y.shape[1], -1).T
@@ -113,16 +113,34 @@ class Sequential:
             errors.append(total_error / len(X))
             if verbose and (epoch + 1) % 50 == 0:
                 print(f"epoch: {epoch + 1}/{epochs}, error={errors[-1]}")
-        
-        # print(error)
-        # import matplotlib.pyplot as plt
-        # plt.plot(range(1, len(error) + 1), error, 'r')
-        # plt.show()
 
         plot = True
-
         if plot:
-            self._plot_error(X.T, Y.reshape(Y.shape[0], -1).T, errors)
+            self._plot_error(X[-1].T, Y[-1].reshape(Y.shape[0], -1).T, errors)
+
+    def _stochastic_gradient_descent(self, X, Y, epochs, learning_rate, verbose, seed):
+        errors = []
+        if seed is not None:
+            np.random.seed(seed)
+        indices = np.random.randint(0, X.shape[0], epochs)
+
+        for epoch in range(epochs):
+            i = indices[epoch]
+            sample = X[i].reshape(-1, 1)
+            print(sample)
+            output = self._forward_propagation(sample)
+
+            errors.append(self.loss_function.forward(output, Y[i].reshape(-1, 1)))
+
+            gradient = self.loss_function.backward(output, Y[i].reshape(-1, 1))
+            self._backward_propagation(gradient, learning_rate)
+
+            if verbose and (epoch + 1) % 50 == 0:
+                print(f"epoch: {epoch + 1}/{epochs}, error={errors[-1]}")
+
+        plot = True
+        if plot:
+            self._plot_error(X[i].reshape(-1, 1), Y[i].reshape(-1, 1), errors)
 
     def _forward_propagation(self, X) -> np.array:
         output = X
