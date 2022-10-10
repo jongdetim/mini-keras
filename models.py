@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 from layers import Layer
 from loss_functions import *
-
+from utils import shuffle_arrays, split_given_size
 
 class Sequential:
 
@@ -33,7 +33,7 @@ class Sequential:
                     raise ValueError("amount of output neurons of every layer should " +
                                      "correspond to amount of input neurons in next layer")
 
-    def fit(self, X, Y, epochs: int = 1000, learning_rate: float = 0.01, stochastic: bool = True, verbose: bool = True, seed: int = None) -> None:
+    def fit(self, X, Y, epochs: int = 1000, learning_rate: float = 0.01, stochastic: bool = True, batch_size: int = 64, verbose: bool = True, seed: int = None) -> None:
         if not Y.shape[1] == self.layers[-1].dimensions[1]:
             raise ValueError(
                 f"Y size ({Y.shape[1]}) should be equal to output layer size ({self.layers[-1].dimensions[1]})")
@@ -65,6 +65,7 @@ class Sequential:
         pred = self._forward_propagation(X)
         return self.loss_function.forward(pred, Y)
 
+    # full batch gradient descent. feeds entire dataset per parameter update
     def _gradient_descent(self, X, Y, epochs, learning_rate, verbose):
         errors = []
 
@@ -91,7 +92,8 @@ class Sequential:
         if plot:
             self._plot_error(X, Y, errors)
 
-    def _stochastic_gradient_descent_all(self, X, Y, epochs, learning_rate, verbose, seed):
+    # every sample, but update parameters after each sample
+    def _stochastic_gradient_descent_all_samples(self, X, Y, epochs, learning_rate, verbose, seed):
         errors = []
 
         # Y = Y.reshape(Y.shape[1], -1).T
@@ -118,6 +120,7 @@ class Sequential:
         if plot:
             self._plot_error(X[-1].T, Y[-1].reshape(Y.shape[0], -1).T, errors)
 
+    # single sample GD
     def _stochastic_gradient_descent(self, X, Y, epochs, learning_rate, verbose, seed):
         errors = []
         if seed is not None:
@@ -142,6 +145,30 @@ class Sequential:
         if plot:
             self._plot_error(X[i].reshape(-1, 1), Y[i].reshape(-1, 1), errors)
 
+    def _prepare_batches(self, X, Y, batch_size, seed):
+        X, Y = shuffle_arrays([X, Y], seed) # check if this doesn't change the original data
+        return split_given_size(X, batch_size), split_given_size(Y, batch_size)
+
+    # SGD with specified batch size
+    def _batch_gradient_descent(self, X, Y, epochs, learning_rate, batch_size, verbose, seed, plot=True):
+        errors = []
+
+        for epoch in range(epochs):
+            x_batches, y_batches = self._prepare_batches(X, Y, batch_size, seed)
+            for x_batch, y_batch in x_batches, y_batches:
+                output = self._forward_propagation(x_batch)
+
+                errors.append(self.loss_function.forward(output, y_batch))
+
+                gradient = self.loss_function.backward(output, y_batch)
+                self._backward_propagation(gradient, learning_rate * x_batch.shape[0] / batch_size)
+
+            if verbose and (epoch + 1) % 50 == 0:
+                print(f"epoch: {epoch + 1}/{epochs}, error={errors[-1]}")
+
+        if plot:
+            self._plot_error(x_batches[-1], y_batches[-1], errors)
+
     def _forward_propagation(self, X) -> np.array:
         output = X
         for layer in self.layers:
@@ -154,8 +181,8 @@ class Sequential:
             gradient = layer.backward(gradient, learning_rate)
 
     def _plot_error(self, X, Y, errors):
-        output = self._forward_propagation(X)
-        errors.append(self.loss_function.forward(output, Y))
+        # output = self._forward_propagation(X)
+        # errors.append(self.loss_function.forward(output, Y))
         plt.plot(range(0, len(errors)), errors, 'r')
         plt.locator_params(axis="x", integer=True, tight=True)
         plt.show()
