@@ -48,8 +48,12 @@ class Sequential:
         if Y_labels is not None and len(Y_labels) is not self.layers[-1].dimensions[1]:
             raise ValueError("Y_labels has to be same length as output neurons")
         
-        X = X.T
+        print(X)
+        X = X.reshape(-1, X.shape[0]).T if len(X.shape) < 2 else X.T
+        print(X)
         Y = self._forward_propagation(X)
+        print(Y)
+        print(Y_labels[np.argmax(Y, axis=0)])
 
         if output_type == 'numerical':
             return Y.T

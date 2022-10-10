@@ -1,4 +1,5 @@
 import numpy as np
+from typing import Tuple
 
 def shuffle_arrays(arrays, seed=None):
     """Shuffles copies of arrays in the same order, along axis=0
@@ -20,3 +21,9 @@ def shuffle_arrays(arrays, seed=None):
 
 def split_given_size(a, size):
     return np.split(a, np.arange(size, len(a), size))
+
+def one_hot(Y : np.ndarray, col_wise=False) -> Tuple[np.ndarray, np.ndarray]:
+    classes, class_num = np.unique(Y, return_inverse=True)
+    print(classes)
+    a = np.eye(len(classes))[class_num].astype('uint8')
+    return a.T if col_wise else a, classes

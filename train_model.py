@@ -4,11 +4,12 @@
 
 import pandas as pd
 import numpy as np
+
 from loss_functions import *
 from activation_functions import *
 from models import Sequential
 from layers import Dense
-from typing import Tuple
+from utils import one_hot
 
 dataset_path = 'datasets/data-multilayer-perceptron.csv'
 labels = ['id', 'diagnosis', 'mean radius', 'mean texture', 'mean perimeter', 'mean area', 'mean smoothness', 'mean compactness', 'mean concavity', 'mean concave points', 'mean symmetry', 'mean fractal simension',
@@ -17,12 +18,6 @@ labels = ['id', 'diagnosis', 'mean radius', 'mean texture', 'mean perimeter', 'm
 
 def clean_data(data: pd.DataFrame) -> pd.DataFrame:
     return data
-
-def one_hot(Y : np.ndarray, col_wise=False) -> Tuple[np.ndarray, np.ndarray]:
-    classes, class_num = np.unique(Y, return_inverse=True)
-    print(classes)
-    a = np.eye(len(classes))[class_num].astype('uint8')
-    return a.T if col_wise else a, classes
 
 def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
     pass
@@ -61,7 +56,7 @@ model = Sequential([Dense((3, 5), activation=ReLU),
 model.fit(X[:], Y, epochs=200, learning_rate=0.01, stochastic=True)
 
 #%%
-model.predict(X[0:5], Y_labels, output_type='exclusive')
+model.predict(X[552:569], Y_labels, output_type='exclusive')
 # model.predict(X[0:5], Y_labels, output_type='numerical')
 
 #%%
