@@ -38,7 +38,7 @@ class Sequential:
             raise ValueError(
                 f"Y size ({Y.shape[1]}) should be equal to output layer size ({self.layers[-1].dimensions[1]})")
         if stochastic:
-            self._stochastic_gradient_descent(X, Y, epochs, learning_rate, verbose, seed)
+            self._batch_gradient_descent(X, Y, epochs, learning_rate, batch_size, verbose, seed)
         else:
             self._gradient_descent(X, Y, epochs, learning_rate, verbose)
 
@@ -155,19 +155,23 @@ class Sequential:
 
         for epoch in range(epochs):
             x_batches, y_batches = self._prepare_batches(X, Y, batch_size, seed)
-            for x_batch, y_batch in x_batches, y_batches:
-                output = self._forward_propagation(x_batch)
+            epoch_error = 0
+            for x_batch, y_batch in zip(x_batches, y_batches):
+                output = self._forward_propagation(x_batch.T)
 
-                errors.append(self.loss_function.forward(output, y_batch))
+                # errors.append(self.loss_function.forward(output, y_batch.T))
+                epoch_error += self.loss_function.forward(output, y_batch.T)
 
-                gradient = self.loss_function.backward(output, y_batch)
+                gradient = self.loss_function.backward(output, y_batch.T)
                 self._backward_propagation(gradient, learning_rate * x_batch.shape[0] / batch_size)
+
+            errors.append(epoch_error / len(x_batches))
 
             if verbose and (epoch + 1) % 50 == 0:
                 print(f"epoch: {epoch + 1}/{epochs}, error={errors[-1]}")
 
         if plot:
-            self._plot_error(x_batches[-1], y_batches[-1], errors)
+            self._plot_error(x_batches[-1].T, y_batches[-1].T, errors)
 
     def _forward_propagation(self, X) -> np.array:
         output = X
@@ -185,4 +189,6 @@ class Sequential:
         # errors.append(self.loss_function.forward(output, Y))
         plt.plot(range(0, len(errors)), errors, 'r')
         plt.locator_params(axis="x", integer=True, tight=True)
+        plt.ylabel("loss")
+        plt.xlabel("iterations")
         plt.show()

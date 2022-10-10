@@ -55,7 +55,7 @@ model = Sequential([Dense((3, 5), activation=ReLU),
                     Dense((5, 2), activation=SoftMax)], BinaryCrossEntropy)
 
 # %%
-model.fit(X[:], Y, epochs=200, learning_rate=0.01, stochastic=False)
+# model.fit(X[:], Y, epochs=200, learning_rate=0.01, stochastic=False)
 
 #%%
 model.fit(X[:], Y, epochs=200, learning_rate=0.01, stochastic=True)
