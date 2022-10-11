@@ -3,10 +3,4 @@
         so higher learning rate means bigger steps & potentially lower average error? but then why does error increase with low LR?
     + only happens with high learning rates
 - accuracy function
-- check if X and Y are same size
-- compare stochastic to batch GD
-- shuffle for stochastic GD & option to feed 1 random datapoint instead of iterating over all datapoints
-- implement minibatches
-- regularize function
-- test stochastic descent
 - pass seed to model on init

@@ -33,9 +33,6 @@ def standardize_data(data):
 # %% read file
 dataset = pd.read_csv(dataset_path, names=labels)
 
-# %%
-dataset.head()
-
 #%%
 Y, Y_labels = one_hot(dataset['diagnosis'].to_numpy())
 X = dataset[['worst area', 'worst smoothness', 'mean texture']].to_numpy()
@@ -53,7 +50,7 @@ model = Sequential([Dense((3, 5), activation=ReLU),
 # model.fit(X[:], Y, epochs=200, learning_rate=0.01, stochastic=False)
 
 #%%
-model.fit(X[:], Y, epochs=200, learning_rate=0.01, stochastic=True)
+model.fit(X, Y, epochs=300, learning_rate=0.01, batch_size=32)
 
 #%%
 model.predict(X[552:569], Y_labels, output_type='exclusive')
@@ -66,4 +63,6 @@ model.loss(X, Y)
 for layer in model.layers:
     print("weights:", layer.weights)
     print("biases:", layer.biases)
+# %%
+print(len(X), len(Y))
 # %%
