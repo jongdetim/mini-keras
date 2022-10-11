@@ -27,3 +27,11 @@ def one_hot(Y : np.ndarray, col_wise=False) -> Tuple[np.ndarray, np.ndarray]:
     print(classes)
     a = np.eye(len(classes))[class_num].astype('uint8')
     return a.T if col_wise else a, classes
+
+def normalize(data):
+    data_norm = (data - np.min(data, axis=0))/ (np.max(data, axis=0) - np.min(data, axis=0))
+    return data_norm
+
+def standardize(data):
+    standardized_data = (data - np.mean(data, axis=0)) / np.std(data, axis=0)
+    return standardized_data

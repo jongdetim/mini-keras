@@ -9,7 +9,7 @@ from loss_functions import *
 from activation_functions import *
 from models import Sequential
 from layers import Dense
-from utils import one_hot
+from utils import one_hot, standardize
 
 dataset_path = 'datasets/data-multilayer-perceptron.csv'
 labels = ['id', 'diagnosis', 'mean radius', 'mean texture', 'mean perimeter', 'mean area', 'mean smoothness', 'mean compactness', 'mean concavity', 'mean concave points', 'mean symmetry', 'mean fractal simension',
@@ -22,14 +22,6 @@ def clean_data(data: pd.DataFrame) -> pd.DataFrame:
 def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
     pass
 
-def normalize_data(data):
-    data_norm = (data - np.min(data, axis=0))/ (np.max(data, axis=0) - np.min(data, axis=0))
-    return data_norm
-
-def standardize_data(data):
-    standardized_data = (data - np.mean(data, axis=0)) / np.std(data, axis=0)
-    return standardized_data
-
 # %% read file
 dataset = pd.read_csv(dataset_path, names=labels)
 
@@ -37,7 +29,7 @@ dataset = pd.read_csv(dataset_path, names=labels)
 Y, Y_labels = one_hot(dataset['diagnosis'].to_numpy())
 X = dataset[['worst area', 'worst smoothness', 'mean texture']].to_numpy()
 print(X)
-X = standardize_data(X)
+X = standardize(X)
 print(len(X))
 print(X)
 print(np.mean(X, axis=0))
