@@ -48,6 +48,7 @@ class Sequential:
                 f"batch_size ({batch_size}) should be integer value between 1 and amount of datapoints ({len(X)})")
         self._batch_gradient_descent(X, Y, epochs, learning_rate, batch_size, verbose, seed)
 
+    # could be part of base class Model, that Sequential would inherit from
     def predict(self, X: np.ndarray, Y_labels: np.ndarray = None, output_type: str = 'numerical', cutoff: float = 0.5) -> np.ndarray:
         if output_type not in self.allowed_output_types:
             raise ValueError(
@@ -67,6 +68,11 @@ class Sequential:
             return Y >= cutoff if Y_labels is None \
                 else np.array(list((Y_labels[(Y >= cutoff)[i]] for i in range(Y.shape[0]))), dtype=object)
 
+    def score(self, X, Y):
+        prediction = self.predict(X, output_type='exclusive')
+        score = np.sum(prediction == np.argmax(Y, axis=1)) / len(prediction)
+        print("accuracy:", score)
+
     def loss(self, X: np.ndarray, Y: np.ndarray) -> int:
         X = X.T
         Y = Y.reshape(Y.shape[0], -1).T
@@ -77,7 +83,6 @@ class Sequential:
         X, Y = shuffle_arrays([X, Y], seed)
         return split_given_size(X, batch_size), split_given_size(Y, batch_size)
 
-    # SGD with specified batch size
     def _batch_gradient_descent(self, X, Y, epochs, learning_rate, batch_size, verbose, seed, plot=True):
         errors = []
         for epoch in range(epochs):
@@ -86,7 +91,6 @@ class Sequential:
             for x_batch, y_batch in zip(x_batches, y_batches):
                 output = self._forward_propagation(x_batch.T)
 
-                # errors.append(self.loss_function.forward(output, y_batch.T))
                 epoch_error += self.loss_function.forward(output, y_batch.T)
 
                 gradient = self.loss_function.backward(output, y_batch.T)
@@ -107,7 +111,6 @@ class Sequential:
         output = X
         for layer in self.layers:
             output = layer.forward(output)
-            # print("layer output: ", output)
         return output
 
     def _backward_propagation(self, gradient, learning_rate) -> np.array:

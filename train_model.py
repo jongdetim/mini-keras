@@ -42,7 +42,8 @@ model = Sequential([Dense((3, 5), activation=ReLU),
 # model.fit(X[:], Y, epochs=200, learning_rate=0.01, stochastic=False)
 
 #%%
-model.fit(X, Y, epochs=300, learning_rate=0.01, batch_size=32)
+model.fit(X, Y, epochs=3000, learning_rate=0.01, batch_size=32)
+model.score(X, Y)
 
 #%%
 model.predict(X[552:569], Y_labels, output_type='exclusive')
@@ -51,10 +52,12 @@ model.predict(X[552:569], Y_labels, output_type='exclusive')
 #%%
 model.loss(X, Y)
 
+#%%
+model.score(X, Y)
+
 # %%
 for layer in model.layers:
     print("weights:", layer.weights)
     print("biases:", layer.biases)
-# %%
-print(len(X), len(Y))
+
 # %%
