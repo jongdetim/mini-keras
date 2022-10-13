@@ -1,5 +1,6 @@
 from multiprocessing.sharedctypes import Value
 from typing import List, Callable
+from math import ceil
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -60,13 +61,18 @@ class Sequential:
         X = X.reshape(-1, X.shape[0]).T if len(X.shape) < 2 else X.T
         Y = self._forward_propagation(X)
 
+        # print(X, Y, Y_labels, Y.shape[0])
+        # print(Y >= cutoff)
+        # for i in range(Y.shape[0]):
+        #     print((Y >= cutoff)[i])
+
         if output_type == 'numerical':
             return Y.T
         if output_type == 'exclusive':
             return np.argmax(Y, axis=0) if Y_labels is None else Y_labels[np.argmax(Y, axis=0)]
         if output_type == 'multi-label':
-            return Y >= cutoff if Y_labels is None \
-                else np.array(list((Y_labels[(Y >= cutoff)[i]] for i in range(Y.shape[0]))), dtype=object)
+            return Y.T >= cutoff if Y_labels is None \
+                else np.array(list((Y_labels[(Y >= cutoff)[:,i]] for i in range(Y.shape[1]))), dtype=object)
 
     def score(self, X, Y):
         prediction = self.predict(X, output_type='exclusive')
@@ -99,7 +105,7 @@ class Sequential:
 
             errors.append(epoch_error / len(x_batches))
 
-            if verbose and (epoch + 1) % (epochs // 10) == 0:
+            if verbose and (epoch + 1) % (ceil(epochs / 10) if epochs >= 10 else 2) == 0:
                 print(f"epoch: {epoch + 1}/{epochs}, error={errors[-1]}")
             # if verbose and (epoch + 1) % 50 == 0:
             #     print(f"epoch: {epoch + 1}/{epochs}, error={errors[-1]}")

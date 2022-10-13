@@ -42,11 +42,11 @@ model = Sequential([Dense((3, 5), activation=ReLU),
 # model.fit(X[:], Y, epochs=200, learning_rate=0.01, stochastic=False)
 
 #%%
-model.fit(X, Y, epochs=3000, learning_rate=0.01, batch_size=32)
+model.fit(X, Y, epochs=43, learning_rate=0.01, batch_size=32)
 model.score(X, Y)
 
 #%%
-model.predict(X[552:569], Y_labels, output_type='exclusive')
+model.predict(X[560:569], Y_labels, output_type='multi-label')
 # model.predict(X[0:5], Y_labels, output_type='numerical')
 
 #%%
