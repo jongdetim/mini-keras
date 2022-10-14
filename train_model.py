@@ -46,11 +46,20 @@ validation_set = {'X': X_validation, 'Y': Y_validation}
 # X = standardize(X)
 
 # %%
+model = Sequential([Dense((3, 2), activation=SoftMax)], BinaryCrossEntropy)
+
+# %%
 model = Sequential([Dense((3, 5), activation=ReLU),
                     Dense((5, 2), activation=SoftMax)], BinaryCrossEntropy)
 
+# %%
+model = Sequential([Dense((3, 2), activation=ReLU),
+                    Dense((2, 1), activation=ReLU),
+                    Dense((1, 2), activation=SoftMax)], BinaryCrossEntropy)
+
+
 #%%
-model.fit(X_train, Y_train, epochs=3000, learning_rate=0.1, batch_size=32, validation_set=validation_set)
+model.fit(X_train, Y_train, epochs=500, learning_rate=0.01, batch_size=32, validation_set=validation_set)
 model.score(X_validation, Y_validation)
 
 #%%
