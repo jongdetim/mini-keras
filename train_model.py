@@ -9,7 +9,9 @@ from loss_functions import *
 from activation_functions import *
 from models import Sequential
 from layers import Dense
-from utils import one_hot, standardize
+from utils import one_hot, standardize, split_dataset
+
+pd.options.mode.chained_assignment = None
 
 dataset_path = 'datasets/data-multilayer-perceptron.csv'
 labels = ['id', 'diagnosis', 'mean radius', 'mean texture', 'mean perimeter', 'mean area', 'mean smoothness', 'mean compactness', 'mean concavity', 'mean concave points', 'mean symmetry', 'mean fractal simension',
@@ -19,41 +21,47 @@ labels = ['id', 'diagnosis', 'mean radius', 'mean texture', 'mean perimeter', 'm
 def clean_data(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
-def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
-    pass
 
 # %% read file
-dataset = pd.read_csv(dataset_path, names=labels)
+full_dataset = pd.read_csv(dataset_path, names=labels)
 
 #%%
+dataset = full_dataset[['worst area', 'worst smoothness', 'mean texture', 'diagnosis']]
 Y, Y_labels = one_hot(dataset['diagnosis'].to_numpy())
-X = dataset[['worst area', 'worst smoothness', 'mean texture']].to_numpy()
-print(X)
-X = standardize(X)
-print(len(X))
-print(X)
-print(np.mean(X, axis=0))
+dataset = dataset.drop('diagnosis', axis=1)
+dataset = standardize(dataset)
+dataset['Y'] = Y.tolist()
+
+train_set, validation_set = split_dataset(dataset, 0.5)
+
+X_train = train_set[['worst area', 'worst smoothness', 'mean texture']].to_numpy()
+X_validation = validation_set[['worst area', 'worst smoothness', 'mean texture']].to_numpy()
+Y_train = np.vstack(train_set['Y'].to_numpy())
+Y_validation = np.vstack(validation_set['Y'].to_numpy())
+
+validation_set = {'X': X_validation, 'Y': Y_validation}
+
+#%%
+# x_ = dataset[['worst area', 'worst smoothness', 'mean texture']].to_numpy()
+# X = standardize(X)
 
 # %%
 model = Sequential([Dense((3, 5), activation=ReLU),
                     Dense((5, 2), activation=SoftMax)], BinaryCrossEntropy)
 
-# %%
-# model.fit(X[:], Y, epochs=200, learning_rate=0.01, stochastic=False)
+#%%
+model.fit(X_train, Y_train, epochs=3000, learning_rate=0.1, batch_size=32, validation_set=validation_set)
+model.score(X_validation, Y_validation)
 
 #%%
-model.fit(X, Y, epochs=43, learning_rate=0.01, batch_size=32)
-model.score(X, Y)
-
-#%%
-model.predict(X[560:569], Y_labels, output_type='multi-label')
+model.predict(X_validation, Y_labels, output_type='exclusive')
 # model.predict(X[0:5], Y_labels, output_type='numerical')
 
 #%%
-model.loss(X, Y)
+# model.loss(X, Y)
 
-#%%
-model.score(X, Y)
+# #%%
+# model.score(X, Y)
 
 # %%
 for layer in model.layers:

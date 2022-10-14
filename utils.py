@@ -1,5 +1,6 @@
-import numpy as np
 from typing import Tuple
+import numpy as np
+import pandas as pd
 
 def shuffle_arrays(arrays, seed=None):
     """Shuffles copies of arrays in the same order, along axis=0
@@ -24,7 +25,7 @@ def split_given_size(a, size):
 
 def one_hot(Y : np.ndarray, col_wise=False) -> Tuple[np.ndarray, np.ndarray]:
     classes, class_num = np.unique(Y, return_inverse=True)
-    print(classes)
+    # print(classes)
     a = np.eye(len(classes))[class_num].astype('uint8')
     return a.T if col_wise else a, classes
 
@@ -35,3 +36,11 @@ def normalize(data):
 def standardize(data):
     standardized_data = (data - np.mean(data, axis=0)) / np.std(data, axis=0)
     return standardized_data
+
+def split_dataset(dataset: pd.DataFrame, fraction=0.5, seed=None):
+    if seed is not None:
+        train_set = dataset.sample(frac=fraction, random_state=seed)
+    else:
+        train_set = dataset.sample(frac=fraction)
+    validation_set = dataset.drop(train_set.index)
+    return train_set, validation_set
