@@ -2,6 +2,12 @@ from typing import Tuple
 import numpy as np
 import pandas as pd
 
+# def timeline_sample_faster(series, num):
+#     arr = np.random.sample((50, 5000))
+#     length = arr.shape[1]
+#     for _ in range(num):
+#         yield series[: , np.random.permutation(length)]
+
 def shuffle_arrays(arrays, seed=None):
     """Shuffles copies of arrays in the same order, along axis=0
 

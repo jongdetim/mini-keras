@@ -78,6 +78,7 @@ class Sequential:
         prediction = self.predict(X, output_type='exclusive')
         score = np.sum(prediction == np.argmax(Y, axis=1)) / len(prediction)
         print("accuracy:", score)
+        #should return instead of print
 
     def loss(self, X: np.ndarray, Y: np.ndarray) -> int:
         X = X.T
@@ -101,6 +102,10 @@ class Sequential:
                 epoch_error += self.loss_function.forward(output, y_batch.T)
 
                 gradient = self.loss_function.backward(output, y_batch.T)
+                # print("loss gradient:", gradient)
+                # print("model output:", output)
+                # print("input batch x:", x_batch)
+                # print("label batch y:", y_batch)
                 self._backward_propagation(
                     gradient, learning_rate * x_batch.shape[0] / batch_size)
 
@@ -125,6 +130,7 @@ class Sequential:
         output = X
         for layer in self.layers:
             output = layer.forward(output)
+            # print("layer forward output:", output)
         return output
 
     def _backward_propagation(self, gradient, learning_rate) -> np.array:
