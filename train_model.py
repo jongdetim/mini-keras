@@ -2,6 +2,7 @@
 %load_ext autoreload
 %autoreload 2
 
+from timeit import timeit
 import pandas as pd
 import numpy as np
 
@@ -9,7 +10,7 @@ from loss_functions import *
 from activation_functions import *
 from models import Sequential
 from layers import Dense
-from utils import one_hot, standardize, split_dataset
+from utils import one_hot, shuffle_in_unison, standardize, split_dataset, shuffle_arrays_faster, shuffle_in_unison, shuffle_arrays
 
 pd.options.mode.chained_assignment = None
 
@@ -99,7 +100,3 @@ print(X_train)
 for layer in model.layers:
     print("weights:", layer.weights)
     print("biases:", layer.biases)
-
-# %%
-
-# %%

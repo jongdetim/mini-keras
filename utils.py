@@ -2,29 +2,46 @@ from typing import Tuple
 import numpy as np
 import pandas as pd
 
-# def timeline_sample_faster(series, num):
-#     arr = np.random.sample((50, 5000))
-#     length = arr.shape[1]
-#     for _ in range(num):
-#         yield series[: , np.random.permutation(length)]
+def shuffle_in_unison(arrays, seed=None):
+    """identical performance to shuffle_arrays"""
+    n_elem = arrays[0].shape[0]
+    if seed is not None:
+        np.random.seed(seed)
+    indices = np.random.permutation(n_elem)
+    return (array[indices] for array in arrays)
 
 def shuffle_arrays(arrays, seed=None):
-    """Shuffles copies of arrays in the same order, along axis=0
+    """Shuffles copies of arrays in unison, along axis=0
 
     Parameters:
     -----------
     arrays : List of NumPy arrays.
     seed : Seed value if int >= 0, else seed is random.
     """
-    assert all(len(arr) == len(arrays[0]) for arr in arrays)
-    seed = np.random.randint(0, 2**(32 - 1) - 1) if seed is None else seed
+    perm = np.arange(arrays[0].shape[0])
+    if seed is not None:
+        np.random.seed(seed)
+    np.random.shuffle(perm)
+    return (array[perm] for array in arrays)
 
-    shuffled_arrays = [np.copy(array) for array in arrays]
-    for arr in shuffled_arrays:
-        rstate = np.random.RandomState(seed)
-        rstate.shuffle(arr)
+# def shuffle_arrays_slow(arrays, seed=None):
+#     """SLOWER than shuffle_arrays() !
+#     Shuffles copies of arrays in the same order, along axis=0
+
+#     Parameters:
+#     -----------
+#     arrays : List of NumPy arrays.
+#     seed : Seed value if int >= 0, else seed is random.
+#     """
+
+#     if seed is not None:
+#         np.random.seed(seed)
+
+#     shuffled_arrays = [np.copy(array) for array in arrays]
+#     for arr in shuffled_arrays:
+#         np.random.shuffle(arr)
     
-    return (arr for arr in shuffled_arrays)
+#     return shuffled_arrays
 
 def split_given_size(a, size):
     return np.split(a, np.arange(size, len(a), size))
