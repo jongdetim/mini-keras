@@ -1,6 +1,9 @@
 from multiprocessing.sharedctypes import Value
 from typing import List, Callable
-from math import ceil
+# from math import ceil
+import json
+import pickle
+import jsonpickle
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -148,3 +151,21 @@ class Sequential:
         plt.xlabel("epochs")
         plt.legend()
         plt.show()
+
+    def save(self, file_path, as_json=False):
+        if as_json:
+            with open(file_path + '.json', mode='w', encoding='utf8') as file:
+                output = jsonpickle.encode(self)
+                json.dump(output, file)
+        else:
+            with open(file_path + '.pickle', 'wb') as file:
+                pickle.dump(self, file)
+
+    @staticmethod
+    def load(file_path: str, as_json: bool = False):
+        with open(file_path, 'rb') as file:
+            if (file_path.endswith('.json') or as_json):
+                json_obj = json.load(file)
+                return jsonpickle.decode(json_obj)
+            else:
+                return pickle.load(file)

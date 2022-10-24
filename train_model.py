@@ -1,8 +1,8 @@
 #%% delete magic after development
-%load_ext autoreload
-%autoreload 2
+# %load_ext autoreload
+# %autoreload 2
 
-from timeit import timeit
+# from timeit import timeit
 import pandas as pd
 import numpy as np
 
@@ -10,7 +10,7 @@ from loss_functions import *
 from activation_functions import *
 from models import Sequential
 from layers import Dense
-from utils import one_hot, shuffle_in_unison, standardize, split_dataset, shuffle_arrays_faster, shuffle_in_unison, shuffle_arrays
+from utils import one_hot, standardize, split_dataset
 
 pd.options.mode.chained_assignment = None
 
@@ -78,7 +78,7 @@ model = Sequential([Dense((30, 8), activation=LReLU, seed=1),
 
 
 #%%
-model.fit(X_train, Y_train, epochs=1000, learning_rate=0.01, batch_size=32, validation_set=validation_set, seed=1)
+model.fit(X_train, Y_train, epochs=100, learning_rate=0.01, batch_size=32, validation_set=validation_set, seed=1)
 model.score(X_train, Y_train)
 model.score(X_validation, Y_validation)
 
@@ -100,3 +100,24 @@ print(X_train)
 for layer in model.layers:
     print("weights:", layer.weights)
     print("biases:", layer.biases)
+
+#%%
+model.save("MLP", as_json=False)
+
+#%%
+model = Sequential.load("MLP.pickle", as_json=False)
+for layer in model.layers:
+    print("weights:", layer.weights)
+    print("biases:", layer.biases)
+
+#%%
+# import cProfile
+# profile = cProfile.Profile()
+# profile.enable()
+
+# model.fit(X_train, Y_train, epochs=1000, learning_rate=0.01,\
+#     batch_size=32, validation_set=validation_set, seed=1)
+
+# profile.sort_stats('cumtime')
+
+# %%
