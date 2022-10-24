@@ -1,5 +1,0 @@
-write model params
-load model params
-
-problem: dead ReLU. with 2 layers with ReLU activation, output of 1st layer is always fully positive.
-if 2nd layer weights are all initialized as negative values, the network starts compeltely dead!!
