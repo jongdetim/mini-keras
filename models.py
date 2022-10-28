@@ -1,9 +1,8 @@
 from multiprocessing.sharedctypes import Value
 from typing import List, Callable
-# from math import ceil
+from math import ceil
 import json
 import pickle
-import jsonpickle
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -64,11 +63,6 @@ class Sequential:
         X = X.reshape(-1, X.shape[0]).T if len(X.shape) < 2 else X.T
         Y = self._forward_propagation(X)
 
-        # print(X, Y, Y_labels, Y.shape[0])
-        # print(Y >= cutoff)
-        # for i in range(Y.shape[0]):
-        #     print((Y >= cutoff)[i])
-
         if output_type == 'numerical':
             return Y.T
         if output_type == 'exclusive':
@@ -80,8 +74,7 @@ class Sequential:
     def score(self, X, Y):
         prediction = self.predict(X, output_type='exclusive')
         score = np.sum(prediction == np.argmax(Y, axis=1)) / len(prediction)
-        print("accuracy:", score)
-        #should return instead of print
+        return score
 
     def loss(self, X: np.ndarray, Y: np.ndarray) -> int:
         X = X.T
@@ -101,33 +94,24 @@ class Sequential:
             x_batches, y_batches = self._prepare_batches(X, Y, batch_size, seed) if batch_size < len(X) else ([X], [Y])
             for x_batch, y_batch in zip(x_batches, y_batches):
                 output = self._forward_propagation(x_batch.T)
-
-                epoch_error += self.loss_function.forward(output, y_batch.T)
-
+                # epoch_error += self.loss_function.forward(output, y_batch.T)
                 gradient = self.loss_function.backward(output, y_batch.T)
-                # print("loss gradient:", gradient)
-                # print("model output:", output)
-                # print("input batch x:", x_batch)
-                # print("label batch y:", y_batch)
                 self._backward_propagation(
                     gradient, learning_rate * x_batch.shape[0] / batch_size)
 
             # errors.append(epoch_error / len(x_batches))
+            if verbose or plot:
+                errors.append(self.loss(X, Y))
 
-            # eval version
-            errors.append(self.loss(X, Y))
-            validation_errors.append(self.loss(validation_set['X'], validation_set['Y']))
+            if validation_set is not None:
+                validation_errors.append(self.loss(validation_set['X'], validation_set['Y']))
 
-            # if verbose and (epoch + 1) % (ceil(epochs / 10) if epochs >= 10 else 2) == 0:
-            #     print(f"epoch: {epoch + 1}/{epochs}, error={errors[-1]}")
-
-            # eval version
-            if verbose:
-                print(f"epoch: {epoch + 1}/{epochs} - loss: {self.loss(X, Y)}") if validation_set is None else \
-                    print(f"epoch: {epoch + 1}/{epochs} - loss: {self.loss(X, Y)} - val_loss: {self.loss(validation_set['X'], validation_set['Y'])}")
+            if verbose and (epoch + 1) % (ceil(epochs / 10) if epochs >= 10 else 2) == 0:
+                print(f"epoch: {epoch + 1}/{epochs} - loss: {self.errors[-1]}") if validation_set is None else \
+                    print(f"epoch: {epoch + 1}/{epochs} - loss: {self.errors[-1]} - validation loss: {self.loss(validation_set['X'], validation_set['Y'])}")
 
         if plot:
-            self._plot_error(x_batches[-1].T, y_batches[-1].T, errors, validation_errors)
+            self._plot_error(errors, validation_errors)
 
     def _forward_propagation(self, X) -> np.array:
         output = X
@@ -140,9 +124,7 @@ class Sequential:
         for layer in reversed(self.layers):
             gradient = layer.backward(gradient, learning_rate)
 
-    def _plot_error(self, X, Y, errors, validation_errors=None):
-        # output = self._forward_propagation(X)
-        # errors.append(self.loss_function.forward(output, Y))
+    def _plot_error(self, errors, validation_errors=None):
         plt.plot(range(0, len(errors)), errors, 'r', label='training set')
         if validation_errors is not None:
             plt.plot(range(0, len(validation_errors)), validation_errors, 'b', label='validation set')
@@ -152,20 +134,11 @@ class Sequential:
         plt.legend()
         plt.show()
 
-    def save(self, file_path, as_json=False):
-        if as_json:
-            with open(file_path + '.json', mode='w', encoding='utf8') as file:
-                output = jsonpickle.encode(self)
-                json.dump(output, file)
-        else:
-            with open(file_path + '.pickle', 'wb') as file:
-                pickle.dump(self, file)
+    def save(self, file_path):
+        with open(file_path + '.pickle', 'wb') as file:
+            pickle.dump(self, file)
 
     @staticmethod
-    def load(file_path: str, as_json: bool = False):
+    def load(file_path: str):
         with open(file_path, 'rb') as file:
-            if (file_path.endswith('.json') or as_json):
-                json_obj = json.load(file)
-                return jsonpickle.decode(json_obj)
-            else:
-                return pickle.load(file)
+            return pickle.load(file)
