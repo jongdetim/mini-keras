@@ -1,6 +1,6 @@
 # project specific files
-houses.csv
-datasets/weights.txt
+*.pickle
+*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

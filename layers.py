@@ -24,7 +24,7 @@ class Dense(Layer):
     allowed_init_methods = ['xavier', 'normal']
 
     def __init__(self, dimensions: tuple, activation: Callable=None, weights=None,
-                 biases=None, init_method='xavier', distribution='uniform'):
+                 biases=None, init_method='xavier', distribution='uniform', seed: int=None):
         self.weights: np.array = np.array(weights) if weights is not None else None
         self.biases: np.array = np.array(biases) if biases is not None else None
         self.init_method = init_method
@@ -34,7 +34,7 @@ class Dense(Layer):
         self._check_valid_args()
 
         if self.weights is None:
-            self._init_random_params(self.dimensions)
+            self._init_random_params(self.dimensions, seed)
 
     def _check_valid_args(self):
         if len(self.dimensions) != 2 or any in self.dimensions <= 0:
@@ -47,7 +47,9 @@ class Dense(Layer):
         if self.distribution not in self.allowed_distributions:
             raise ValueError(f"distribution: '{self.distribution}' is not valid")
 
-    def _init_random_params(self, dimensions: tuple):
+    def _init_random_params(self, dimensions: tuple, seed: int):
+        if seed is not None:
+            np.random.seed(seed)
         fan_in, fan_out = dimensions
         if self.init_method == 'xavier':
             self.weights = self._xavier_init(fan_in, fan_out)

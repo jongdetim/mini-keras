@@ -35,6 +35,16 @@ class ReLU(Activation):
         return np.multiply(z > 0, gradient)
 
 
+class LReLU(Activation):
+    @staticmethod
+    def forward(z: np.array) -> np.array:
+        return np.where(z > 0, z, z * 0.01)
+
+    @staticmethod
+    def backward(z: np.array, gradient: np.array, alpha=0.01) -> np.array:
+        return np.multiply(np.where(z > 0, 1, alpha), gradient)
+
+
 class Tanh(Activation):
     @staticmethod
     def forward(z: np.array) -> np.array:
