@@ -5,7 +5,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from layers import Layer
-# from loss_functions import *
 from utils import shuffle_arrays, split_given_size
 
 
@@ -57,7 +56,7 @@ class Sequential:
         if len(X) != len(Y):
             raise ValueError("X must contain the same amount of samples as Y")
 
-    def fit(self, X, Y, epochs: int = 1000, learning_rate: float = 0.01, batch_size: int = 32, verbose: bool = True, seed: int = None, validation_set=None) -> None:
+    def fit(self, X, Y, epochs: int = 1000, learning_rate: float = 0.01, batch_size: int = 32, verbose: bool = True, seed: int = None, plot: bool = True, validation_set: dict = None) -> None:
         """Trains the model by using (batch/stochastic) gradient descent
 
         Arguments
@@ -78,6 +77,8 @@ class Sequential:
                 Flag to print learning process on stdout. Defaults to True.
             seed (int, optional):
                 Seed for data shuffling at the start of every epoch. Defaults to None.
+            plot (bool, optional):
+                Whether to plot the loss after training. Defaults to True.
             validation_set (dict(['X', 'Y']), optional):
                 Dictionary with 'X' key mapped to X feature datapoints value and 'Y' key mapped to Y output datapoints. Defaults to None.
         """
@@ -88,8 +89,7 @@ class Sequential:
         if batch_size > len(X) or batch_size < 1:
             raise ValueError(
                 f"batch_size ({batch_size}) should be integer value between 1 and amount of datapoints ({len(X)})")
-        self._batch_gradient_descent(
-            X, Y, epochs, learning_rate, batch_size, verbose, seed, validation_set)
+        self._batch_gradient_descent(X, Y, epochs, learning_rate, batch_size, verbose, seed, plot, validation_set)
 
     # could be part of base class Model, that Sequential would inherit from
     def predict(self, X: np.ndarray, Y_labels: np.ndarray = None, output_type: str = 'numerical', cutoff: float = 0.5) -> np.ndarray:
@@ -169,21 +169,19 @@ class Sequential:
         X, Y = shuffle_arrays([X, Y], seed)
         return split_given_size(X, batch_size), split_given_size(Y, batch_size)
 
-    def _batch_gradient_descent(self, X, Y, epochs, learning_rate, batch_size, verbose, seed, plot=True, validation_set=None):
+    def _batch_gradient_descent(self, X, Y, epochs, learning_rate, batch_size, verbose, seed, plot, validation_set):
         errors = []
         validation_errors = []
+
         for epoch in range(epochs):
-            # epoch_error = 0
             x_batches, y_batches = self._prepare_batches(
                 X, Y, batch_size, seed) if batch_size < len(X) else ([X], [Y])
             for x_batch, y_batch in zip(x_batches, y_batches):
                 output = self._forward_propagation(x_batch.T)
-                # epoch_error += self.loss_function.forward(output, y_batch.T)
                 gradient = self.loss_function.backward(output, y_batch.T)
                 self._backward_propagation(
                     gradient, learning_rate * x_batch.shape[0] / batch_size)
 
-            # errors.append(epoch_error / len(x_batches))
             if verbose or plot:
                 errors.append(self.loss(X, Y))
 
@@ -214,7 +212,7 @@ class Sequential:
 
     def _plot_error(self, errors, validation_errors=None):
         plt.plot(range(0, len(errors)), errors, 'r', label='training set')
-        if validation_errors is not None:
+        if bool(validation_errors):
             plt.plot(range(0, len(validation_errors)),
                      validation_errors, 'b', label='validation set')
         plt.locator_params(axis="x", integer=True, tight=True)
