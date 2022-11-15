@@ -4,17 +4,16 @@ import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 
-from layers import Layer
-from utils import shuffle_arrays, split_given_size
+from .layers import Layer
+from .utils import shuffle_arrays, split_given_size
 
 
 class Sequential:
-    """Fully connected artificial neural network model
+    """Sequential neural network. Suited for a plain stack of layers.
 
     Arguments
     ---------
-        layers (list(Layer)):
-            Takes a list of class instances that inherit from Layer baseclass.
+        layers (list(Layer)): Takes a list of class instances that inherit from Layer baseclass.
             The amount of output neurons of every layer should correspond to the amount of input neurons in the next layer.
 
         loss_function (Callable):
@@ -56,7 +55,7 @@ class Sequential:
         if len(X) != len(Y):
             raise ValueError("X must contain the same amount of samples as Y")
 
-    def fit(self, X, Y, epochs: int = 1000, learning_rate: float = 0.01, batch_size: int = 32, verbose: bool = True, seed: int = None, plot: bool = True, validation_set: dict = None) -> None:
+    def fit(self, X: np.ndarray, Y: np.ndarray, epochs: int = 1000, learning_rate: float = 0.01, batch_size: int = 32, verbose: bool = True, seed: int = None, plot: bool = True, validation_set: dict = None) -> None:
         """Trains the model by using (batch/stochastic) gradient descent
 
         Arguments

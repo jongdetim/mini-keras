@@ -4,6 +4,7 @@ import numpy as np
 
 
 class Layer(ABC):
+    """Abstract Base Class / blueprint for layers used by the Sequential model"""
     def __init__(self, dimensions: tuple, activation: Callable=None):
         self.input = None
         self.output = None
@@ -25,19 +26,19 @@ class Dense(Layer):
     Arguments
     ---------
         dimensions (tuple):
-                Tuple of (n input neurons, m output neurons)
-            activation (Callable, optional):
-                Activation function to be applied on output. Defaults to None.
-            weights (_type_, optional):
-                Weights to initialize Dense instance with. Weight dimensions have to align with the specified dimensions parameter. Defaults to None.
-            biases (_type_, optional):
-                Biases to initialize Dense instance with. Defaults to None.
-            init_method (str, optional):
-                Weight initialization method. Valid values are ['xavier', 'normal']. Defaults to 'xavier'.
-            distribution (str, optional):
-                Weight initialiazation distribution. Valid values are ['uniform', 'normal' / 'gaussian']. Defaults to 'uniform'.
-            seed (int, optional):
-                Sets seed for random weight initialization. Defaults to None.
+            Tuple of (n input neurons, m output neurons)
+        activation (Callable, optional):
+            Activation function to be applied on output. Defaults to None.
+        weights (_type_, optional):
+            Weights to initialize Dense instance with. Weight dimensions have to align with the specified dimensions parameter. Defaults to None.
+        biases (_type_, optional):
+            Biases to initialize Dense instance with. Defaults to None.
+        init_method (str, optional):
+            Weight initialization method. Valid values are ['xavier', 'normal']. Defaults to 'xavier'.
+        distribution (str, optional):
+            Weight initialiazation distribution. Valid values are ['uniform', 'normal' / 'gaussian']. Defaults to 'uniform'.
+        seed (int, optional):
+            Sets seed for random weight initialization. Defaults to None.
 
     Returns
     -------

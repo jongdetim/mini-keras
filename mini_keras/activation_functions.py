@@ -3,6 +3,7 @@ import numpy as np
 
 
 class Activation(ABC):
+    """Base activation function class blueprint"""
     @staticmethod
     @abstractmethod
     def forward(z: np.ndarray) -> np.ndarray:
@@ -15,6 +16,7 @@ class Activation(ABC):
 
 
 class Sigmoid(Activation):
+    """"""
     @staticmethod
     def forward(z: np.ndarray) -> np.ndarray:
         return 1 / (1 + np.exp(-z))
@@ -26,6 +28,7 @@ class Sigmoid(Activation):
 
 
 class ReLU(Activation):
+    """"""
     @staticmethod
     def forward(z: np.ndarray) -> np.ndarray:
         return np.maximum(0, z)
@@ -36,6 +39,7 @@ class ReLU(Activation):
 
 
 class LReLU(Activation):
+    """"""
     @staticmethod
     def forward(z: np.ndarray) -> np.ndarray:
         return np.where(z > 0, z, z * 0.01)
@@ -46,6 +50,7 @@ class LReLU(Activation):
 
 
 class Tanh(Activation):
+    """"""
     @staticmethod
     def forward(z: np.ndarray) -> np.ndarray:
         return (np.exp(z) - np.exp(-z)) / (np.exp(z) + np.exp(-z))
@@ -56,6 +61,7 @@ class Tanh(Activation):
 
 
 class SoftMax(Activation):
+    """"""
     @staticmethod
     def forward(z: np.ndarray) -> np.ndarray:
         # z = np.exp(x) #numerically unstable

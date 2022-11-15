@@ -1,6 +1,7 @@
 # project specific files
 *.pickle
 *.json
+*.docstring
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
