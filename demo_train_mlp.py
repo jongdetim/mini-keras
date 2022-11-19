@@ -44,7 +44,6 @@ dataset = standardize(dataset)
 dataset['Y'] = Y.tolist()
 
 train_set, validation_set = split_dataset(dataset, 0.5)
-
 X_train = train_set.iloc[:,:-1].to_numpy()
 X_validation = validation_set.iloc[:,:-1].to_numpy()
 Y_train = np.vstack(train_set['Y'].to_numpy())
