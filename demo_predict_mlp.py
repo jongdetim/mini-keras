@@ -30,4 +30,5 @@ dataset = dataset.drop('diagnosis', axis=1)
 X = standardize(dataset)
 
 #%%
-print(model.loss(X, Y))
+print("cross entropy loss:", model.loss(X, Y))
+print("accuracy:", model.score(X, Y))

@@ -31,13 +31,13 @@
         <h2>API Documentation</h2>
             <ul class="memberlist">
             <li>
-                    <a class="class" href="#Layer">Layer</a>
+                    <a class="class" href="#BaseLayer">BaseLayer</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="function" href="#Layer.forward">forward</a>
+                                <a class="function" href="#BaseLayer.forward">forward</a>
                         </li>
                         <li>
-                                <a class="function" href="#Layer.backward">backward</a>
+                                <a class="function" href="#BaseLayer.backward">backward</a>
                         </li>
                 </ul>
 
@@ -83,7 +83,7 @@
 </span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="k">class</span> <span class="nc">Layer</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="k">class</span> <span class="nc">BaseLayer</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a>    <span class="sd">&quot;&quot;&quot;Abstract Base Class / blueprint for layers used by the Sequential model&quot;&quot;&quot;</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">activation</span><span class="p">:</span> <span class="n">Callable</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="kc">None</span>
@@ -100,7 +100,7 @@
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>        <span class="k">pass</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>
-</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="k">class</span> <span class="nc">Dense</span><span class="p">(</span><span class="n">Layer</span><span class="p">):</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="k">class</span> <span class="nc">Dense</span><span class="p">(</span><span class="n">BaseLayer</span><span class="p">):</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>    <span class="sd">&quot;&quot;&quot;Fully connected layer class</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="sd">    Arguments</span>
@@ -220,32 +220,32 @@
 
 
             </section>
-                <section id="Layer">
-                            <input id="Layer-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                <section id="BaseLayer">
+                            <input id="BaseLayer-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">Layer</span><wbr>(<span class="base">abc.ABC</span>):
+    <span class="name">BaseLayer</span><wbr>(<span class="base">abc.ABC</span>):
 
-                <label class="view-source-button" for="Layer-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="BaseLayer-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Layer"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Layer-7"><a href="#Layer-7"><span class="linenos"> 7</span></a><span class="k">class</span> <span class="nc">Layer</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-</span><span id="Layer-8"><a href="#Layer-8"><span class="linenos"> 8</span></a>    <span class="sd">&quot;&quot;&quot;Abstract Base Class / blueprint for layers used by the Sequential model&quot;&quot;&quot;</span>
-</span><span id="Layer-9"><a href="#Layer-9"><span class="linenos"> 9</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">activation</span><span class="p">:</span> <span class="n">Callable</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-</span><span id="Layer-10"><a href="#Layer-10"><span class="linenos">10</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Layer-11"><a href="#Layer-11"><span class="linenos">11</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Layer-12"><a href="#Layer-12"><span class="linenos">12</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">activation</span>
-</span><span id="Layer-13"><a href="#Layer-13"><span class="linenos">13</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">=</span> <span class="n">dimensions</span>
-</span><span id="Layer-14"><a href="#Layer-14"><span class="linenos">14</span></a>
-</span><span id="Layer-15"><a href="#Layer-15"><span class="linenos">15</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Layer-16"><a href="#Layer-16"><span class="linenos">16</span></a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-</span><span id="Layer-17"><a href="#Layer-17"><span class="linenos">17</span></a>        <span class="k">pass</span>
-</span><span id="Layer-18"><a href="#Layer-18"><span class="linenos">18</span></a>
-</span><span id="Layer-19"><a href="#Layer-19"><span class="linenos">19</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Layer-20"><a href="#Layer-20"><span class="linenos">20</span></a>    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_gradient</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">):</span>
-</span><span id="Layer-21"><a href="#Layer-21"><span class="linenos">21</span></a>        <span class="k">pass</span>
+    <a class="headerlink" href="#BaseLayer"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BaseLayer-7"><a href="#BaseLayer-7"><span class="linenos"> 7</span></a><span class="k">class</span> <span class="nc">BaseLayer</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+</span><span id="BaseLayer-8"><a href="#BaseLayer-8"><span class="linenos"> 8</span></a>    <span class="sd">&quot;&quot;&quot;Abstract Base Class / blueprint for layers used by the Sequential model&quot;&quot;&quot;</span>
+</span><span id="BaseLayer-9"><a href="#BaseLayer-9"><span class="linenos"> 9</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">activation</span><span class="p">:</span> <span class="n">Callable</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span><span id="BaseLayer-10"><a href="#BaseLayer-10"><span class="linenos">10</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="BaseLayer-11"><a href="#BaseLayer-11"><span class="linenos">11</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="BaseLayer-12"><a href="#BaseLayer-12"><span class="linenos">12</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">activation</span>
+</span><span id="BaseLayer-13"><a href="#BaseLayer-13"><span class="linenos">13</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">=</span> <span class="n">dimensions</span>
+</span><span id="BaseLayer-14"><a href="#BaseLayer-14"><span class="linenos">14</span></a>
+</span><span id="BaseLayer-15"><a href="#BaseLayer-15"><span class="linenos">15</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="BaseLayer-16"><a href="#BaseLayer-16"><span class="linenos">16</span></a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+</span><span id="BaseLayer-17"><a href="#BaseLayer-17"><span class="linenos">17</span></a>        <span class="k">pass</span>
+</span><span id="BaseLayer-18"><a href="#BaseLayer-18"><span class="linenos">18</span></a>
+</span><span id="BaseLayer-19"><a href="#BaseLayer-19"><span class="linenos">19</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="BaseLayer-20"><a href="#BaseLayer-20"><span class="linenos">20</span></a>    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_gradient</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">):</span>
+</span><span id="BaseLayer-21"><a href="#BaseLayer-21"><span class="linenos">21</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
 
@@ -253,42 +253,42 @@
 </div>
 
 
-                            <div id="Layer.forward" class="classattr">
-                                        <input id="Layer.forward-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="BaseLayer.forward" class="classattr">
+                                        <input id="BaseLayer.forward-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator">@abstractmethod</div>
 
         <span class="def">def</span>
         <span class="name">forward</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">x</span></span><span class="return-annotation">):</span></span>
 
-                <label class="view-source-button" for="Layer.forward-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="BaseLayer.forward-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Layer.forward"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Layer.forward-15"><a href="#Layer.forward-15"><span class="linenos">15</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Layer.forward-16"><a href="#Layer.forward-16"><span class="linenos">16</span></a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-</span><span id="Layer.forward-17"><a href="#Layer.forward-17"><span class="linenos">17</span></a>        <span class="k">pass</span>
+    <a class="headerlink" href="#BaseLayer.forward"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BaseLayer.forward-15"><a href="#BaseLayer.forward-15"><span class="linenos">15</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="BaseLayer.forward-16"><a href="#BaseLayer.forward-16"><span class="linenos">16</span></a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+</span><span id="BaseLayer.forward-17"><a href="#BaseLayer.forward-17"><span class="linenos">17</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
 
     
 
                             </div>
-                            <div id="Layer.backward" class="classattr">
-                                        <input id="Layer.backward-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="BaseLayer.backward" class="classattr">
+                                        <input id="BaseLayer.backward-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator">@abstractmethod</div>
 
         <span class="def">def</span>
         <span class="name">backward</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">output_gradient</span>, </span><span class="param"><span class="n">learning_rate</span></span><span class="return-annotation">):</span></span>
 
-                <label class="view-source-button" for="Layer.backward-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="BaseLayer.backward-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Layer.backward"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Layer.backward-19"><a href="#Layer.backward-19"><span class="linenos">19</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Layer.backward-20"><a href="#Layer.backward-20"><span class="linenos">20</span></a>    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_gradient</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">):</span>
-</span><span id="Layer.backward-21"><a href="#Layer.backward-21"><span class="linenos">21</span></a>        <span class="k">pass</span>
+    <a class="headerlink" href="#BaseLayer.backward"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BaseLayer.backward-19"><a href="#BaseLayer.backward-19"><span class="linenos">19</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="BaseLayer.backward-20"><a href="#BaseLayer.backward-20"><span class="linenos">20</span></a>    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_gradient</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">):</span>
+</span><span id="BaseLayer.backward-21"><a href="#BaseLayer.backward-21"><span class="linenos">21</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
 
@@ -301,13 +301,13 @@
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">Dense</span><wbr>(<span class="base"><a href="#Layer">Layer</a></span>):
+    <span class="name">Dense</span><wbr>(<span class="base"><a href="#BaseLayer">BaseLayer</a></span>):
 
                 <label class="view-source-button" for="Dense-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Dense"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Dense-24"><a href="#Dense-24"><span class="linenos"> 24</span></a><span class="k">class</span> <span class="nc">Dense</span><span class="p">(</span><span class="n">Layer</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Dense-24"><a href="#Dense-24"><span class="linenos"> 24</span></a><span class="k">class</span> <span class="nc">Dense</span><span class="p">(</span><span class="n">BaseLayer</span><span class="p">):</span>
 </span><span id="Dense-25"><a href="#Dense-25"><span class="linenos"> 25</span></a>    <span class="sd">&quot;&quot;&quot;Fully connected layer class</span>
 </span><span id="Dense-26"><a href="#Dense-26"><span class="linenos"> 26</span></a>
 </span><span id="Dense-27"><a href="#Dense-27"><span class="linenos"> 27</span></a><span class="sd">    Arguments</span>

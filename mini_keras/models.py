@@ -4,7 +4,7 @@ import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 
-from .layers import Layer
+from .layers import BaseLayer
 from .utils import shuffle_arrays, split_given_size
 
 
@@ -31,7 +31,7 @@ class Sequential:
     """
     allowed_output_types = ['numerical', 'exclusive', 'multi-label']
 
-    def __init__(self, layers: List[Layer], loss_function: Callable):
+    def __init__(self, layers: List[BaseLayer], loss_function: Callable):
         self.layers = layers
         self.loss_function = loss_function
 
@@ -42,7 +42,7 @@ class Sequential:
             raise ValueError(
                 "layers argument is empty. should contain atleast one layer")
         for layer in self.layers:
-            if not isinstance(layer, Layer):
+            if not isinstance(layer, BaseLayer):
                 raise TypeError(
                     "layers argument should be a list of classes that inherit from Layer class")
         if len(self.layers) > 1:

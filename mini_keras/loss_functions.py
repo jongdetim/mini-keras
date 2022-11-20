@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 
-class Loss(ABC):
+class BaseLoss(ABC):
     @staticmethod
     @abstractmethod
     def forward(prediction: np.array, truth: np.array) -> np.array:
@@ -14,7 +14,7 @@ class Loss(ABC):
         pass
 
 
-class BinaryCrossEntropy(Loss):
+class BinaryCrossEntropy(BaseLoss):
     @staticmethod
     def forward(prediction: np.array, truth: np.array, epsilon=0.000001) -> np.array:
         prediction = np.clip(prediction, epsilon, 1 - epsilon)

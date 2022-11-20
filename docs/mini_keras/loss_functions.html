@@ -31,13 +31,13 @@
         <h2>API Documentation</h2>
             <ul class="memberlist">
             <li>
-                    <a class="class" href="#Loss">Loss</a>
+                    <a class="class" href="#BaseLoss">BaseLoss</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="function" href="#Loss.forward">forward</a>
+                                <a class="function" href="#BaseLoss.forward">forward</a>
                         </li>
                         <li>
-                                <a class="function" href="#Loss.backward">backward</a>
+                                <a class="function" href="#BaseLoss.backward">backward</a>
                         </li>
                 </ul>
 
@@ -82,7 +82,7 @@
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="k">class</span> <span class="nc">Loss</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="k">class</span> <span class="nc">BaseLoss</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="nd">@staticmethod</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="nd">@abstractmethod</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">truth</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
@@ -94,7 +94,7 @@
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>        <span class="k">pass</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="k">class</span> <span class="nc">BinaryCrossEntropy</span><span class="p">(</span><span class="n">Loss</span><span class="p">):</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="k">class</span> <span class="nc">BinaryCrossEntropy</span><span class="p">(</span><span class="n">BaseLoss</span><span class="p">):</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="nd">@staticmethod</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">truth</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.000001</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>        <span class="n">prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">epsilon</span><span class="p">)</span>
@@ -109,27 +109,27 @@
 
 
             </section>
-                <section id="Loss">
-                            <input id="Loss-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                <section id="BaseLoss">
+                            <input id="BaseLoss-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">Loss</span><wbr>(<span class="base">abc.ABC</span>):
+    <span class="name">BaseLoss</span><wbr>(<span class="base">abc.ABC</span>):
 
-                <label class="view-source-button" for="Loss-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="BaseLoss-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Loss"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Loss-6"><a href="#Loss-6"><span class="linenos"> 6</span></a><span class="k">class</span> <span class="nc">Loss</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-</span><span id="Loss-7"><a href="#Loss-7"><span class="linenos"> 7</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="Loss-8"><a href="#Loss-8"><span class="linenos"> 8</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Loss-9"><a href="#Loss-9"><span class="linenos"> 9</span></a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">truth</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-</span><span id="Loss-10"><a href="#Loss-10"><span class="linenos">10</span></a>        <span class="k">pass</span>
-</span><span id="Loss-11"><a href="#Loss-11"><span class="linenos">11</span></a>
-</span><span id="Loss-12"><a href="#Loss-12"><span class="linenos">12</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="Loss-13"><a href="#Loss-13"><span class="linenos">13</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Loss-14"><a href="#Loss-14"><span class="linenos">14</span></a>    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">truth</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-</span><span id="Loss-15"><a href="#Loss-15"><span class="linenos">15</span></a>        <span class="k">pass</span>
+    <a class="headerlink" href="#BaseLoss"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BaseLoss-6"><a href="#BaseLoss-6"><span class="linenos"> 6</span></a><span class="k">class</span> <span class="nc">BaseLoss</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+</span><span id="BaseLoss-7"><a href="#BaseLoss-7"><span class="linenos"> 7</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="BaseLoss-8"><a href="#BaseLoss-8"><span class="linenos"> 8</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="BaseLoss-9"><a href="#BaseLoss-9"><span class="linenos"> 9</span></a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">truth</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+</span><span id="BaseLoss-10"><a href="#BaseLoss-10"><span class="linenos">10</span></a>        <span class="k">pass</span>
+</span><span id="BaseLoss-11"><a href="#BaseLoss-11"><span class="linenos">11</span></a>
+</span><span id="BaseLoss-12"><a href="#BaseLoss-12"><span class="linenos">12</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="BaseLoss-13"><a href="#BaseLoss-13"><span class="linenos">13</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="BaseLoss-14"><a href="#BaseLoss-14"><span class="linenos">14</span></a>    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">truth</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+</span><span id="BaseLoss-15"><a href="#BaseLoss-15"><span class="linenos">15</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
 
@@ -138,8 +138,8 @@ inheritance.</p>
 </div>
 
 
-                            <div id="Loss.forward" class="classattr">
-                                        <input id="Loss.forward-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="BaseLoss.forward" class="classattr">
+                                        <input id="BaseLoss.forward-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator">@staticmethod</div>
         <div class="decorator">@abstractmethod</div>
@@ -147,22 +147,22 @@ inheritance.</p>
         <span class="def">def</span>
         <span class="name">forward</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">prediction</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">built</span><span class="o">-</span><span class="ow">in</span> <span class="n">function</span> <span class="n">array</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">truth</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">built</span><span class="o">-</span><span class="ow">in</span> <span class="n">function</span> <span class="n">array</span><span class="o">&gt;</span></span><span class="return-annotation">) -> <span class="o">&lt;</span><span class="n">built</span><span class="o">-</span><span class="ow">in</span> <span class="n">function</span> <span class="n">array</span><span class="o">&gt;</span>:</span></span>
 
-                <label class="view-source-button" for="Loss.forward-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="BaseLoss.forward-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Loss.forward"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Loss.forward-7"><a href="#Loss.forward-7"><span class="linenos"> 7</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="Loss.forward-8"><a href="#Loss.forward-8"><span class="linenos"> 8</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Loss.forward-9"><a href="#Loss.forward-9"><span class="linenos"> 9</span></a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">truth</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-</span><span id="Loss.forward-10"><a href="#Loss.forward-10"><span class="linenos">10</span></a>        <span class="k">pass</span>
+    <a class="headerlink" href="#BaseLoss.forward"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BaseLoss.forward-7"><a href="#BaseLoss.forward-7"><span class="linenos"> 7</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="BaseLoss.forward-8"><a href="#BaseLoss.forward-8"><span class="linenos"> 8</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="BaseLoss.forward-9"><a href="#BaseLoss.forward-9"><span class="linenos"> 9</span></a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">truth</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+</span><span id="BaseLoss.forward-10"><a href="#BaseLoss.forward-10"><span class="linenos">10</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
 
     
 
                             </div>
-                            <div id="Loss.backward" class="classattr">
-                                        <input id="Loss.backward-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="BaseLoss.backward" class="classattr">
+                                        <input id="BaseLoss.backward-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator">@staticmethod</div>
         <div class="decorator">@abstractmethod</div>
@@ -170,14 +170,14 @@ inheritance.</p>
         <span class="def">def</span>
         <span class="name">backward</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">prediction</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">built</span><span class="o">-</span><span class="ow">in</span> <span class="n">function</span> <span class="n">array</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">truth</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">built</span><span class="o">-</span><span class="ow">in</span> <span class="n">function</span> <span class="n">array</span><span class="o">&gt;</span></span><span class="return-annotation">) -> <span class="o">&lt;</span><span class="n">built</span><span class="o">-</span><span class="ow">in</span> <span class="n">function</span> <span class="n">array</span><span class="o">&gt;</span>:</span></span>
 
-                <label class="view-source-button" for="Loss.backward-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="BaseLoss.backward-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Loss.backward"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Loss.backward-12"><a href="#Loss.backward-12"><span class="linenos">12</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="Loss.backward-13"><a href="#Loss.backward-13"><span class="linenos">13</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Loss.backward-14"><a href="#Loss.backward-14"><span class="linenos">14</span></a>    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">truth</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-</span><span id="Loss.backward-15"><a href="#Loss.backward-15"><span class="linenos">15</span></a>        <span class="k">pass</span>
+    <a class="headerlink" href="#BaseLoss.backward"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BaseLoss.backward-12"><a href="#BaseLoss.backward-12"><span class="linenos">12</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="BaseLoss.backward-13"><a href="#BaseLoss.backward-13"><span class="linenos">13</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="BaseLoss.backward-14"><a href="#BaseLoss.backward-14"><span class="linenos">14</span></a>    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">truth</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+</span><span id="BaseLoss.backward-15"><a href="#BaseLoss.backward-15"><span class="linenos">15</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
 
@@ -190,13 +190,13 @@ inheritance.</p>
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">BinaryCrossEntropy</span><wbr>(<span class="base"><a href="#Loss">Loss</a></span>):
+    <span class="name">BinaryCrossEntropy</span><wbr>(<span class="base"><a href="#BaseLoss">BaseLoss</a></span>):
 
                 <label class="view-source-button" for="BinaryCrossEntropy-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#BinaryCrossEntropy"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="BinaryCrossEntropy-18"><a href="#BinaryCrossEntropy-18"><span class="linenos">18</span></a><span class="k">class</span> <span class="nc">BinaryCrossEntropy</span><span class="p">(</span><span class="n">Loss</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BinaryCrossEntropy-18"><a href="#BinaryCrossEntropy-18"><span class="linenos">18</span></a><span class="k">class</span> <span class="nc">BinaryCrossEntropy</span><span class="p">(</span><span class="n">BaseLoss</span><span class="p">):</span>
 </span><span id="BinaryCrossEntropy-19"><a href="#BinaryCrossEntropy-19"><span class="linenos">19</span></a>    <span class="nd">@staticmethod</span>
 </span><span id="BinaryCrossEntropy-20"><a href="#BinaryCrossEntropy-20"><span class="linenos">20</span></a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">truth</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.000001</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 </span><span id="BinaryCrossEntropy-21"><a href="#BinaryCrossEntropy-21"><span class="linenos">21</span></a>        <span class="n">prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">epsilon</span><span class="p">)</span>

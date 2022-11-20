@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 
-class Activation(ABC):
+class BaseActivation(ABC):
     """Base activation function class blueprint"""
     @staticmethod
     @abstractmethod
@@ -15,7 +15,7 @@ class Activation(ABC):
         pass
 
 
-class Sigmoid(Activation):
+class Sigmoid(BaseActivation):
     """"""
     @staticmethod
     def forward(z: np.ndarray) -> np.ndarray:
@@ -27,7 +27,7 @@ class Sigmoid(Activation):
         return np.multiply(s * (1 - s), gradient)
 
 
-class ReLU(Activation):
+class ReLU(BaseActivation):
     """"""
     @staticmethod
     def forward(z: np.ndarray) -> np.ndarray:
@@ -38,7 +38,7 @@ class ReLU(Activation):
         return np.multiply(z > 0, gradient)
 
 
-class LReLU(Activation):
+class LReLU(BaseActivation):
     """"""
     @staticmethod
     def forward(z: np.ndarray) -> np.ndarray:
@@ -49,7 +49,7 @@ class LReLU(Activation):
         return np.multiply(np.where(z > 0, 1, alpha), gradient)
 
 
-class Tanh(Activation):
+class Tanh(BaseActivation):
     """"""
     @staticmethod
     def forward(z: np.ndarray) -> np.ndarray:
@@ -60,7 +60,7 @@ class Tanh(Activation):
         return np.multiply(1 - Tanh.forward(z) ** 2, gradient)
 
 
-class SoftMax(Activation):
+class SoftMax(BaseActivation):
     """"""
     @staticmethod
     def forward(z: np.ndarray) -> np.ndarray:

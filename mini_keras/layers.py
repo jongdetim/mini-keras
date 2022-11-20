@@ -3,7 +3,7 @@ from typing import Callable
 import numpy as np
 
 
-class Layer(ABC):
+class BaseLayer(ABC):
     """Abstract Base Class / blueprint for layers used by the Sequential model"""
     def __init__(self, dimensions: tuple, activation: Callable=None):
         self.input = None
@@ -20,7 +20,7 @@ class Layer(ABC):
         pass
 
 
-class Dense(Layer):
+class Dense(BaseLayer):
     """Fully connected layer class
 
     Arguments
