@@ -29,7 +29,7 @@ run:
 ```sh
 pip install -r requirements.txt
 ```
-to install dependecies
+to install dependencies
 
 ## Demo
 
