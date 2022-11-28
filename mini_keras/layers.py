@@ -29,9 +29,9 @@ class Dense(BaseLayer):
             Tuple of (n input neurons, m output neurons)
         activation (Callable, optional):
             Activation function to be applied on output. Defaults to None.
-        weights (_type_, optional):
+        weights (numpy.ndarray, optional):
             Weights to initialize Dense instance with. Weight dimensions have to align with the specified dimensions parameter. Defaults to None.
-        biases (_type_, optional):
+        biases (numpy.ndarray, optional):
             Biases to initialize Dense instance with. Defaults to None.
         init_method (str, optional):
             Weight initialization method. Valid values are ['xavier', 'normal']. Defaults to 'xavier'.
@@ -47,7 +47,7 @@ class Dense(BaseLayer):
     allowed_init_methods = ['xavier', 'normal']
     allowed_distributions = ['uniform', 'normal', 'gaussian']
 
-    def __init__(self, dimensions: tuple, activation: Callable=None, weights=None, biases=None, init_method='xavier', distribution='uniform', seed: int=None):
+    def __init__(self, dimensions: tuple, activation: Callable=None, weights: np.ndarray=None, biases: np.ndarray=None, init_method='xavier', distribution='uniform', seed: int=None):
         self.weights: np.array = np.array(weights) if weights is not None else None
         self.biases: np.array = np.array(biases) if biases is not None else None
         self.init_method = init_method
