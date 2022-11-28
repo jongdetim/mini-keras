@@ -8,6 +8,8 @@ The implemented model uses stochastic/batch gradient descent to train a Multilay
 
 Example:
 ```py
+from mini_keras.models import Sequential
+
 model = Sequential([Dense((30, 8), activation=LReLU),
                     Dense((8, 5), activation=LReLU),
                     Dense((5, 2), activation=SoftMax)], BinaryCrossEntropy)
