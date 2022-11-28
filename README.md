@@ -1,6 +1,6 @@
-# Multilayer Perceptron
+# Mini Keras
 
-A small library to create neural networks from scratch, built with numpy. It has a keras-like syntax, and is built to be easily extendible to different models and architectures.
+A small library to create neural networks from scratch, built with numpy. It has a keras-like syntax and options, and is built to be easily extendible to different models and architectures.
 
 The implemented model uses stochastic/batch gradient descent to train a Multilayer Perceptron.
 
@@ -19,6 +19,15 @@ model.fit(X, Y)
 
 [Documentation](https://jongdetim.github.io/multilayer-perceptron)
 
+## Setup
+
+Python 3 is required to use this project
+
+run:
+```
+pip install -r requirements.txt
+```
+to install dependecies
 
 ## Demo
 
