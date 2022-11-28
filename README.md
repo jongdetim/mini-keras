@@ -26,7 +26,7 @@ model.fit(X, Y)
 Python 3 is required to use this project
 
 run:
-```sh
+```bash
 pip install -r requirements.txt
 ```
 to install dependencies
