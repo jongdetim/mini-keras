@@ -5,7 +5,6 @@ A small library to create neural networks from scratch, built with numpy. It has
 The implemented model uses stochastic/batch gradient descent to train a Multilayer Perceptron.
 
 &nbsp;
-
 Example:
 ```py
 model = Sequential([Dense((30, 8), activation=LReLU),
