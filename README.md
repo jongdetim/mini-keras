@@ -1,4 +1,4 @@
-# Mini Keras
+# Mini-Keras
 
 A small library to create neural networks from scratch, built with numpy. It has a keras-like syntax and options, and is built to be easily extendible to different models and architectures.
 
