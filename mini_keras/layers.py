@@ -21,7 +21,7 @@ class BaseLayer(ABC):
 
 
 class Dense(BaseLayer):
-    """Fully connected layer class
+    """Fully connected layer class.
 
     Arguments
     ---------
