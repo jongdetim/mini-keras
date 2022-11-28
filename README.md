@@ -17,7 +17,7 @@ model.fit(X, Y)
 
 ## Documentation
 
-[Documentation](https://jongdetim.github.io/multilayer-perceptron)
+[Documentation](https://jongdetim.github.io/mini-keras)
 
 ## Setup
 
