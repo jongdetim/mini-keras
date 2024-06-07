@@ -56,6 +56,6 @@ Possible improvements:
 - Decoupling of some responsibilities in the Sequential class
 - GPU support using CUDA
 - Other types of layers, such as convolution & pooling layers
-- Other types of models, such as sequential networks
+- Other types of models, such as recurrent networks
 - Early stopping
 - Regularization
